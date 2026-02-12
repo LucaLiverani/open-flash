@@ -1,0 +1,25 @@
+{
+	"name": "openflash",
+	"compatibility_date": "2025-04-01",
+	"compatibility_flags": [
+		"nodejs_compat"
+	],
+	"assets": {
+		"binding": "ASSETS",
+		"directory": ".open-next/assets"
+	},
+	"d1_databases": [
+		{
+			"binding": "openflash_db",
+			"database_name": "openflash-db",
+			"database_id": "c9ff1959-66db-42c2-bf96-72f65380e7f8"
+		}
+	],
+	"services": [
+		{
+			"binding": "WORKER_SELF_REFERENCE",
+			"service": "openflash"
+		}
+	],
+	"main": ".open-next/worker.js"
+}

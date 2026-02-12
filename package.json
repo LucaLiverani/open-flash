@@ -1,0 +1,30 @@
+{
+  "name": "openflash",
+  "version": "0.1.0",
+  "private": true,
+  "scripts": {
+    "dev": "next dev",
+    "build": "npx @opennextjs/cloudflare build",
+    "preview": "npx wrangler dev",
+    "deploy": "npx wrangler deploy",
+    "cf-typegen": "npx wrangler types --env-interface CloudflareEnv",
+    "db:migrate:local": "npx wrangler d1 execute openflash-db --local --file=migrations/0001_initial.sql",
+    "db:migrate:remote": "npx wrangler d1 execute openflash-db --remote --file=migrations/0001_initial.sql"
+  },
+  "dependencies": {
+    "next": "^15",
+    "react": "^19",
+    "react-dom": "^19",
+    "@opennextjs/cloudflare": "^1"
+  },
+  "devDependencies": {
+    "typescript": "^5",
+    "@types/react": "^19",
+    "@types/react-dom": "^19",
+    "@types/node": "^22",
+    "wrangler": "^4",
+    "tailwindcss": "^4",
+    "@tailwindcss/postcss": "^4",
+    "postcss": "^8"
+  }
+}

@@ -1,0 +1,140 @@
+@import "tailwindcss";
+
+@theme {
+  --font-sans: "Inter", ui-sans-serif, system-ui, sans-serif;
+  --color-primary: #1DB954;
+  --color-primary-dark: #1ED760;
+  --color-secondary: #3B82F6;
+  --color-secondary-dark: #60A5FA;
+  --color-accent: #FBBF24;
+  --color-accent-dark: #F59E0B;
+  --color-background: #121212;
+  --color-surface: #181818;
+  --color-surface-hover: #282828;
+  --color-border: #282828;
+  --color-border-light: #3E3E3E;
+  --color-text: #FFFFFF;
+  --color-text-muted: #A0A0A0;
+  --color-danger: #EF4444;
+  --color-danger-dark: #F87171;
+  --color-input: #282828;
+  --color-input-border: #3E3E3E;
+}
+
+/* Buttons */
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 600;
+  border-radius: 0.5rem;
+  padding: 0.625rem 1.25rem;
+  font-size: 0.875rem;
+  line-height: 1.25rem;
+  min-height: 2.75rem;
+  cursor: pointer;
+  transition: all 150ms ease;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.3), 0 1px 2px rgba(0, 0, 0, 0.2);
+  -webkit-tap-highlight-color: transparent;
+}
+
+.btn:hover {
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3), 0 2px 4px rgba(0, 0, 0, 0.2);
+  transform: translateY(-1px);
+}
+
+.btn:active {
+  transform: translateY(0);
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.2);
+}
+
+.btn:disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+  transform: none;
+  box-shadow: none;
+}
+
+.btn-primary {
+  background-color: var(--color-primary);
+  color: #000000;
+}
+
+.btn-primary:hover:not(:disabled) {
+  background-color: var(--color-primary-dark);
+}
+
+.btn-secondary {
+  background-color: var(--color-secondary);
+  color: #000000;
+}
+
+.btn-secondary:hover:not(:disabled) {
+  background-color: var(--color-secondary-dark);
+}
+
+.btn-danger {
+  background-color: var(--color-danger);
+  color: white;
+}
+
+.btn-danger:hover:not(:disabled) {
+  background-color: var(--color-danger-dark);
+}
+
+.btn-ghost {
+  background-color: var(--color-surface-hover);
+  color: var(--color-text);
+  box-shadow: none;
+  border: 1px solid var(--color-border-light);
+}
+
+.btn-ghost:hover:not(:disabled) {
+  background-color: var(--color-border-light);
+}
+
+.btn-lg {
+  padding: 0.75rem 1.75rem;
+  font-size: 1rem;
+  line-height: 1.5rem;
+}
+
+/* Form inputs */
+.input {
+  width: 100%;
+  padding: 0.625rem 0.75rem;
+  background-color: var(--color-input);
+  border: 1px solid var(--color-input-border);
+  border-radius: 0.5rem;
+  font-size: 1rem;
+  min-height: 2.75rem;
+  color: var(--color-text);
+  transition: border-color 150ms ease, box-shadow 150ms ease;
+}
+
+.input:focus {
+  outline: none;
+  border-color: var(--color-primary);
+  box-shadow: 0 0 0 2px rgba(29, 185, 84, 0.3);
+}
+
+.input::placeholder {
+  color: var(--color-text-muted);
+}
+
+/* Card flip animation utilities */
+.perspective-1000 {
+  perspective: 1000px;
+}
+
+.preserve-3d {
+  transform-style: preserve-3d;
+}
+
+.backface-hidden {
+  backface-visibility: hidden;
+}
+
+.rotate-y-180 {
+  transform: rotateY(180deg);
+}
