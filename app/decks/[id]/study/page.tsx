@@ -3,7 +3,7 @@
 import { useState, useEffect, useCallback } from "react";
 import { useParams } from "next/navigation";
 import Link from "next/link";
-import type { Card } from "@/lib/db";
+import type { Card, Deck } from "@/lib/db";
 import ReviewSession, { type ReviewResult } from "@/components/ReviewSession";
 import LoadingSpinner from "@/components/LoadingSpinner";
 import EmptyState from "@/components/EmptyState";
@@ -32,13 +32,24 @@ export default function StudyPage() {
   const [loading, setLoading] = useState(true);
   const [mode, setMode] = useState<"due" | "all" | null>(null);
   const [results, setResults] = useState<ReviewResult[] | null>(null);
+  const [sourceLang, setSourceLang] = useState("");
+  const [targetLang, setTargetLang] = useState("");
 
   useEffect(() => {
     async function load() {
       try {
-        const res = await fetch(`/api/decks/${params.id}/due`);
-        if (res.ok) {
-          const data = await res.json() as Card[];
+        // Fetch deck info and due cards in parallel
+        const [deckRes, dueRes] = await Promise.all([
+          fetch(`/api/decks/${params.id}`),
+          fetch(`/api/decks/${params.id}/due`),
+        ]);
+        if (deckRes.ok) {
+          const deck = (await deckRes.json()) as Deck;
+          setSourceLang(deck.source_lang);
+          setTargetLang(deck.target_lang);
+        }
+        if (dueRes.ok) {
+          const data = await dueRes.json() as Card[];
           if (data.length > 0) {
             setCards(data);
             setMode("due");
@@ -203,7 +214,7 @@ export default function StudyPage() {
           Practice mode — {cards.length} cards, hardest first
         </p>
       )}
-      <ReviewSession cards={cards} isPractice={mode === "all"} onComplete={handleComplete} />
+      <ReviewSession cards={cards} isPractice={mode === "all"} onComplete={handleComplete} sourceLang={sourceLang} targetLang={targetLang} />
     </div>
   );
 }

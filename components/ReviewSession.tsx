@@ -8,6 +8,8 @@ interface ReviewSessionProps {
   cards: Card[];
   isPractice?: boolean;
   onComplete: (results: ReviewResult[]) => void;
+  sourceLang: string;
+  targetLang: string;
 }
 
 export interface ReviewResult {
@@ -22,7 +24,7 @@ const RATINGS = [
   { quality: 5 as const, label: "Easy", key: "4", color: "bg-primary hover:bg-primary-dark text-black" },
 ];
 
-export default function ReviewSession({ cards, isPractice, onComplete }: ReviewSessionProps) {
+export default function ReviewSession({ cards, isPractice, onComplete, sourceLang, targetLang }: ReviewSessionProps) {
   const [currentIndex, setCurrentIndex] = useState(0);
   const [flipped, setFlipped] = useState(false);
   const resultsRef = useRef<ReviewResult[]>([]);
@@ -99,7 +101,7 @@ export default function ReviewSession({ cards, isPractice, onComplete }: ReviewS
       </div>
 
       {/* Card */}
-      <FlashCard card={currentCard} flipped={flipped} onFlip={handleFlip} />
+      <FlashCard card={currentCard} flipped={flipped} onFlip={handleFlip} sourceLang={sourceLang} targetLang={targetLang} nextWord={cards[currentIndex + 1]?.word} />
 
       {/* Rating buttons */}
       {flipped && (

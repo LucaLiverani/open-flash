@@ -21,5 +21,8 @@
 			"service": "openflash"
 		}
 	],
-	"main": ".open-next/worker.js"
+	"main": ".open-next/worker.js",
+	"observability": {
+		"enabled": true
+	}
 }
