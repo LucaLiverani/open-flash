@@ -10,7 +10,8 @@
     "deploy": "npx @opennextjs/cloudflare build && npx wrangler deploy",
     "cf-typegen": "npx wrangler types --env-interface CloudflareEnv",
     "db:migrate:local": "npx wrangler d1 execute openflash-db --local --file=migrations/0001_initial.sql",
-    "db:migrate:remote": "npx wrangler d1 execute openflash-db --remote --file=migrations/0001_initial.sql"
+    "db:migrate:remote": "npx wrangler d1 execute openflash-db --remote --file=migrations/0001_initial.sql",
+    "db:pull": "bash scripts/db-pull.sh"
   },
   "dependencies": {
     "next": "^15",
