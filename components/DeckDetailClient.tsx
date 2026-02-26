@@ -23,6 +23,9 @@ export default function DeckDetailClient({
   const [cards, setCards] = useState<Card[]>(initialCards);
   const [resetStep, setResetStep] = useState<0 | 1>(0);
   const [resetting, setResetting] = useState(false);
+  const [editingCardId, setEditingCardId] = useState<string | null>(null);
+  const [editForm, setEditForm] = useState({ word: "", translation: "", example_sentence: "", emoji: "" });
+  const [editLoading, setEditLoading] = useState(false);
 
   const fetchCards = useCallback(async () => {
     try {
@@ -35,6 +38,41 @@ export default function DeckDetailClient({
       console.error("Failed to fetch cards:", error);
     }
   }, [deck.id]);
+
+  function startEditing(card: Card) {
+    setEditingCardId(card.id);
+    setEditForm({
+      word: card.word,
+      translation: card.translation,
+      example_sentence: card.example_sentence || "",
+      emoji: card.emoji,
+    });
+  }
+
+  async function handleSaveEdit(cardId: string) {
+    setEditLoading(true);
+    try {
+      const res = await fetch(`/api/cards/${cardId}`, {
+        method: "PUT",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          word: editForm.word.trim(),
+          translation: editForm.translation.trim(),
+          example_sentence: editForm.example_sentence.trim() || null,
+          emoji: editForm.emoji.trim() || "📝",
+        }),
+      });
+      if (res.ok) {
+        const updated = (await res.json()) as Card;
+        setCards((prev) => prev.map((c) => (c.id === cardId ? updated : c)));
+        setEditingCardId(null);
+      }
+    } catch (error) {
+      console.error("Failed to update card:", error);
+    } finally {
+      setEditLoading(false);
+    }
+  }
 
   async function handleDeleteCard(cardId: string) {
     try {
@@ -152,33 +190,102 @@ export default function DeckDetailClient({
             {cards.map((card) => (
               <div
                 key={card.id}
-                className="flex items-center gap-3 bg-surface rounded-lg border border-border p-3"
+                className="bg-surface rounded-lg border border-border p-3"
               >
-                <span className="text-lg">{card.emoji}</span>
-                <div className="flex-1 min-w-0">
-                  <p className="text-sm font-medium">
-                    {card.word} → {card.translation}
-                  </p>
-                  {card.example_sentence && (
-                    <p className="text-xs text-text-muted truncate">
-                      {card.example_sentence}
-                    </p>
-                  )}
-                </div>
-                <div className="flex items-center gap-2">
-                  <span className="text-xs text-text-muted">
-                    {card.repetitions > 0
-                      ? `${card.interval}d interval`
-                      : "New"}
-                  </span>
-                  <button
-                    onClick={() => handleDeleteCard(card.id)}
-                    className="text-text-muted hover:text-danger transition-colors text-sm"
-                    title="Delete card"
-                  >
-                    &times;
-                  </button>
-                </div>
+                {editingCardId === card.id ? (
+                  <div className="space-y-3">
+                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                      <div>
+                        <label className="block text-sm text-text-muted mb-1">Word</label>
+                        <input
+                          type="text"
+                          value={editForm.word}
+                          onChange={(e) => setEditForm((f) => ({ ...f, word: e.target.value }))}
+                          className="input"
+                        />
+                      </div>
+                      <div>
+                        <label className="block text-sm text-text-muted mb-1">Translation</label>
+                        <input
+                          type="text"
+                          value={editForm.translation}
+                          onChange={(e) => setEditForm((f) => ({ ...f, translation: e.target.value }))}
+                          className="input"
+                        />
+                      </div>
+                    </div>
+                    <div className="grid grid-cols-1 sm:grid-cols-[1fr_80px] gap-3">
+                      <div>
+                        <label className="block text-sm text-text-muted mb-1">Example sentence</label>
+                        <input
+                          type="text"
+                          value={editForm.example_sentence}
+                          onChange={(e) => setEditForm((f) => ({ ...f, example_sentence: e.target.value }))}
+                          className="input"
+                        />
+                      </div>
+                      <div>
+                        <label className="block text-sm text-text-muted mb-1">Emoji</label>
+                        <input
+                          type="text"
+                          value={editForm.emoji}
+                          onChange={(e) => setEditForm((f) => ({ ...f, emoji: e.target.value }))}
+                          className="input"
+                        />
+                      </div>
+                    </div>
+                    <div className="flex gap-2">
+                      <button
+                        onClick={() => handleSaveEdit(card.id)}
+                        disabled={!editForm.word.trim() || !editForm.translation.trim() || editLoading}
+                        className="btn btn-primary"
+                      >
+                        {editLoading ? "Saving..." : "Save"}
+                      </button>
+                      <button
+                        onClick={() => setEditingCardId(null)}
+                        className="btn btn-ghost"
+                      >
+                        Cancel
+                      </button>
+                    </div>
+                  </div>
+                ) : (
+                  <div className="flex items-center gap-3">
+                    <span className="text-lg">{card.emoji}</span>
+                    <div className="flex-1 min-w-0">
+                      <p className="text-sm font-medium">
+                        {card.word} → {card.translation}
+                      </p>
+                      {card.example_sentence && (
+                        <p className="text-xs text-text-muted truncate">
+                          {card.example_sentence}
+                        </p>
+                      )}
+                    </div>
+                    <div className="flex items-center gap-2">
+                      <span className="text-xs text-text-muted">
+                        {card.repetitions > 0
+                          ? `${card.interval}d interval`
+                          : "New"}
+                      </span>
+                      <button
+                        onClick={() => startEditing(card)}
+                        className="text-text-muted hover:text-accent transition-colors text-sm"
+                        title="Edit card"
+                      >
+                        ✎
+                      </button>
+                      <button
+                        onClick={() => handleDeleteCard(card.id)}
+                        className="text-text-muted hover:text-danger transition-colors text-sm"
+                        title="Delete card"
+                      >
+                        &times;
+                      </button>
+                    </div>
+                  </div>
+                )}
               </div>
             ))}
           </div>
