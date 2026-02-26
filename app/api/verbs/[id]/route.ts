@@ -1,5 +1,5 @@
 import { NextResponse } from "next/server";
-import { getDB, type SavedVerb } from "@/lib/db";
+import { getDB, type SavedVerb, type VerbDeck } from "@/lib/db";
 import { conjugateVerb, type ConjugationResult, type ConjugationTense } from "@/lib/gemini";
 
 export async function GET(
@@ -26,14 +26,15 @@ export async function PUT(
   { params }: { params: Promise<{ id: string }> }
 ) {
   const { id } = await params;
-  const { tenses, editedTenses } = (await request.json()) as {
-    tenses: string[];
+  const { tenses, editedTenses, meaning } = (await request.json()) as {
+    tenses?: string[];
     editedTenses?: ConjugationTense[];
+    meaning?: string;
   };
 
-  if (!tenses || tenses.length === 0) {
+  if ((!tenses || tenses.length === 0) && meaning === undefined) {
     return NextResponse.json(
-      { error: "tenses array is required" },
+      { error: "At least one of tenses or meaning is required" },
       { status: 400 }
     );
   }
@@ -49,29 +50,56 @@ export async function PUT(
   }
 
   const existing = JSON.parse(verb.conjugations) as ConjugationResult;
-  const baseTenses = editedTenses ?? existing.tenses;
-  const baseTenseNames = new Set(baseTenses.map((t) => t.tense));
-  const newTenses = tenses.filter((t) => !baseTenseNames.has(t));
+  let merged = { ...existing };
 
-  let merged = { ...existing, tenses: baseTenses };
-  if (newTenses.length > 0) {
-    const result = await conjugateVerb(verb.infinitive, verb.language, newTenses);
-    merged = {
-      ...merged,
-      tenses: [...baseTenses, ...result.tenses],
-    };
+  // Update meaning if provided
+  const newMeaning = meaning !== undefined ? meaning.trim() : undefined;
+  if (newMeaning !== undefined) {
+    merged.meaning = newMeaning;
   }
 
-  // Remove tenses that are no longer selected
-  const selectedSet = new Set(tenses);
-  merged = {
-    ...merged,
-    tenses: merged.tenses.filter((t) => selectedSet.has(t.tense)),
-  };
+  // Update tenses if provided
+  if (tenses && tenses.length > 0) {
+    const baseTenses = editedTenses ?? existing.tenses;
+    const baseTenseNames = new Set(baseTenses.map((t) => t.tense));
+    const newTenseNames = tenses.filter((t) => !baseTenseNames.has(t));
 
+    merged.tenses = baseTenses;
+    if (newTenseNames.length > 0) {
+      let targetLang: string | undefined;
+      if (verb.verb_deck_id) {
+        const deck = await db
+          .prepare("SELECT * FROM verb_decks WHERE id = ?")
+          .bind(verb.verb_deck_id)
+          .first<VerbDeck>();
+        targetLang = deck?.translation_lang;
+      }
+      const result = await conjugateVerb(verb.infinitive, verb.language, newTenseNames, targetLang);
+      merged.tenses = [...baseTenses, ...result.tenses];
+    }
+
+    // Remove tenses that are no longer selected
+    const selectedSet = new Set(tenses);
+    merged.tenses = merged.tenses.filter((t) => selectedSet.has(t.tense));
+  } else if (editedTenses) {
+    merged.tenses = editedTenses;
+  }
+
+  const updates: string[] = [];
+  const bindings: unknown[] = [];
+
+  updates.push("conjugations = ?");
+  bindings.push(JSON.stringify(merged));
+
+  if (newMeaning !== undefined) {
+    updates.push("meaning = ?");
+    bindings.push(newMeaning);
+  }
+
+  bindings.push(id);
   await db
-    .prepare("UPDATE saved_verbs SET conjugations = ? WHERE id = ?")
-    .bind(JSON.stringify(merged), id)
+    .prepare(`UPDATE saved_verbs SET ${updates.join(", ")} WHERE id = ?`)
+    .bind(...bindings)
     .run();
 
   const updated = await db

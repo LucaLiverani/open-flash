@@ -5,9 +5,8 @@ import Link from "next/link";
 import { useRouter } from "next/navigation";
 import type { VerbDeck, SavedVerb } from "@/lib/db";
 import { LANGUAGES, type LanguageCode } from "@/lib/db";
-import type { ConjugationResult } from "@/lib/gemini";
+import type { ConjugationResult, ConjugationTense } from "@/lib/gemini";
 import ConjugationTable from "./ConjugationTable";
-import SavedVerbsList from "./SavedVerbsList";
 import TenseSelector from "./TenseSelector";
 
 interface VerbDeckDetailClientProps {
@@ -25,6 +24,11 @@ export default function VerbDeckDetailClient({
   const [verbs, setVerbs] = useState<SavedVerb[]>(initialVerbs);
   const [resetStep, setResetStep] = useState<0 | 1>(0);
   const [resetting, setResetting] = useState(false);
+  const [editingVerbId, setEditingVerbId] = useState<string | null>(null);
+  const [editMeaning, setEditMeaning] = useState("");
+  const [editTenses, setEditTenses] = useState<ConjugationTense[]>([]);
+  const [editLoading, setEditLoading] = useState(false);
+  const [translating, setTranslating] = useState(false);
 
   // Conjugation state
   const [allTenses, setAllTenses] = useState<string[]>([]);
@@ -149,6 +153,61 @@ export default function VerbDeckDetailClient({
       setError("Failed to remove verb");
     }
   };
+
+  function startEditingVerb(verb: SavedVerb) {
+    const conj = JSON.parse(verb.conjugations) as ConjugationResult;
+    setEditingVerbId(verb.id);
+    setEditMeaning(verb.meaning);
+    setEditTenses(conj.tenses);
+  }
+
+  async function handleTranslate(infinitive: string) {
+    setTranslating(true);
+    try {
+      const res = await fetch("/api/translate", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          text: infinitive,
+          source: deck.language,
+          target: deck.translation_lang,
+        }),
+      });
+      if (res.ok) {
+        const data = (await res.json()) as { translation: string };
+        setEditMeaning(data.translation);
+      }
+    } catch {
+      setError("Failed to translate verb");
+    } finally {
+      setTranslating(false);
+    }
+  }
+
+  async function handleSaveEdit(verbId: string) {
+    setEditLoading(true);
+    try {
+      const tenseNames = editTenses.map((t) => t.tense);
+      const res = await fetch(`/api/verbs/${verbId}`, {
+        method: "PUT",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          meaning: editMeaning.trim(),
+          tenses: tenseNames,
+          editedTenses: editTenses,
+        }),
+      });
+      if (res.ok) {
+        const updated = (await res.json()) as SavedVerb;
+        setVerbs((prev) => prev.map((v) => (v.id === verbId ? updated : v)));
+        setEditingVerbId(null);
+      }
+    } catch {
+      setError("Failed to update verb");
+    } finally {
+      setEditLoading(false);
+    }
+  }
 
   const displayedTenses = result?.tenses.filter((t) =>
     selectedTenses.includes(t.tense)
@@ -342,10 +401,91 @@ export default function VerbDeckDetailClient({
         <h2 className="font-semibold mb-3">
           Saved Verbs{verbs.length > 0 ? ` (${verbs.length})` : ""}
         </h2>
-        <SavedVerbsList
-          savedVerbs={verbs}
-          onRemove={handleRemove}
-        />
+        {verbs.length === 0 ? (
+          <p className="text-text-muted text-sm">
+            No saved verbs yet. Conjugate a verb and save it for quick access.
+          </p>
+        ) : (
+          <div className="space-y-2">
+            {verbs.map((v) => (
+              <div
+                key={v.id}
+                className="bg-surface rounded-lg border border-border p-3"
+              >
+                {editingVerbId === v.id ? (
+                  <div className="space-y-4">
+                    <div className="flex items-center justify-between">
+                      <span className="text-lg font-bold">{v.infinitive}</span>
+                    </div>
+                    <div>
+                      <label className="block text-sm text-text-muted mb-1">Meaning</label>
+                      <div className="flex gap-2">
+                        <input
+                          type="text"
+                          value={editMeaning}
+                          onChange={(e) => setEditMeaning(e.target.value)}
+                          className="input flex-1"
+                        />
+                        <button
+                          onClick={() => handleTranslate(v.infinitive)}
+                          disabled={translating}
+                          className="btn btn-ghost text-sm whitespace-nowrap"
+                          title={`Translate to ${translationName}`}
+                        >
+                          {translating ? "..." : "Translate"}
+                        </button>
+                      </div>
+                    </div>
+                    <ConjugationTable
+                      tenses={editTenses}
+                      language={deck.language}
+                      editable
+                      onChange={setEditTenses}
+                    />
+                    <div className="flex gap-2">
+                      <button
+                        onClick={() => handleSaveEdit(v.id)}
+                        disabled={editLoading}
+                        className="btn btn-primary"
+                      >
+                        {editLoading ? "Saving..." : "Save"}
+                      </button>
+                      <button
+                        onClick={() => setEditingVerbId(null)}
+                        className="btn btn-ghost"
+                      >
+                        Cancel
+                      </button>
+                    </div>
+                  </div>
+                ) : (
+                  <div className="flex items-center gap-3">
+                    <div className="flex-1 min-w-0">
+                      <span className="font-medium">{v.infinitive}</span>
+                      <span className="text-text-muted text-sm ml-2">{v.meaning}</span>
+                    </div>
+                    <div className="flex items-center gap-2">
+                      <button
+                        onClick={() => startEditingVerb(v)}
+                        className="text-text-muted hover:text-accent transition-colors text-sm"
+                        title="Edit verb"
+                      >
+                        ✎
+                      </button>
+                      <button
+                        onClick={() => handleRemove(v.id)}
+                        className="text-text-muted hover:text-danger transition-colors text-sm"
+                        title="Remove verb"
+                      >
+                        &times;
+                      </button>
+                    </div>
+                  </div>
+                )}
+              </div>
+            ))}
+          </div>
+        )}
       </div>
     </div>
   );
