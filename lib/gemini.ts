@@ -161,6 +161,198 @@ Return an array of objects in the exact JSON format specified.`,
   return JSON.parse(content) as BulkCardResult[];
 }
 
+export async function translateSentence(
+  sentence: string,
+  sourceLang: LanguageCode,
+  targetLang: LanguageCode
+): Promise<string> {
+  const apiKey = await getApiKey();
+  const sourceName = LANGUAGES[sourceLang];
+  const targetName = LANGUAGES[targetLang];
+
+  const response = await fetch(`${GEMINI_ENDPOINT}?key=${apiKey}`, {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({
+      contents: [
+        {
+          parts: [
+            {
+              text: `Translate this ${sourceName} sentence to ${targetName}: "${sentence}". Return only the translation, nothing else.`,
+            },
+          ],
+        },
+      ],
+      generationConfig: {
+        responseMimeType: "application/json",
+        responseSchema: {
+          type: "OBJECT",
+          properties: {
+            translation: { type: "STRING" },
+          },
+          required: ["translation"],
+        },
+      },
+    }),
+  });
+
+  if (!response.ok) {
+    const text = await response.text();
+    throw new Error(`Gemini API error: ${response.status} ${text}`);
+  }
+
+  const data = await response.json() as GeminiResponse;
+  const content = data.candidates?.[0]?.content?.parts?.[0]?.text;
+  if (!content) {
+    throw new Error("No content in Gemini response");
+  }
+
+  return (JSON.parse(content) as { translation: string }).translation;
+}
+
+// --- Verb Conjugation ---
+
+export interface ConjugationForm {
+  person: string;
+  conjugation: string;
+}
+
+export interface ConjugationTense {
+  tense: string;
+  forms: ConjugationForm[];
+}
+
+export interface ConjugationResult {
+  infinitive: string;
+  meaning: string;
+  language: string;
+  isVerb: boolean;
+  note: string;
+  tenses: ConjugationTense[];
+}
+
+export async function getLanguageTenses(language: string): Promise<string[]> {
+  const apiKey = await getApiKey();
+  const langName = LANGUAGES[language as LanguageCode] ?? language;
+
+  const response = await fetch(`${GEMINI_ENDPOINT}?key=${apiKey}`, {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({
+      contents: [
+        {
+          parts: [
+            {
+              text: `List the most common and important verb tenses/moods for ${langName}. Use the tense names in ${langName} (e.g. for Italian: "Presente Indicativo", not "Present Indicative"). Include indicative, subjunctive, conditional, and imperative moods where applicable. Return 8-15 tenses ordered by importance/frequency of use.`,
+            },
+          ],
+        },
+      ],
+      generationConfig: {
+        responseMimeType: "application/json",
+        responseSchema: {
+          type: "ARRAY",
+          items: { type: "STRING" },
+        },
+      },
+    }),
+  });
+
+  if (!response.ok) {
+    const text = await response.text();
+    throw new Error(`Gemini API error: ${response.status} ${text}`);
+  }
+
+  const data = await response.json() as GeminiResponse;
+  const content = data.candidates?.[0]?.content?.parts?.[0]?.text;
+  if (!content) {
+    throw new Error("No content in Gemini response");
+  }
+
+  return JSON.parse(content) as string[];
+}
+
+export async function conjugateVerb(
+  verb: string,
+  language: string,
+  tenses: string[]
+): Promise<ConjugationResult> {
+  const apiKey = await getApiKey();
+  const langName = LANGUAGES[language as LanguageCode] ?? language;
+
+  const response = await fetch(`${GEMINI_ENDPOINT}?key=${apiKey}`, {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({
+      contents: [
+        {
+          parts: [
+            {
+              text: `Conjugate the ${langName} verb "${verb}" for ONLY these tenses: ${JSON.stringify(tenses)}.
+
+Rules:
+- If the input is not a verb, set isVerb to false and leave tenses empty.
+- Use person labels in ${langName} (e.g. for Italian: "io", "tu", "lui/lei", "noi", "voi", "loro").
+- The "infinitive" field should be the canonical infinitive form of the verb.
+- The "meaning" field should be the English translation (e.g. "to eat").
+- The "note" field can contain edge case notes (e.g. "Chinese verbs don't conjugate") or be empty.
+- Only generate conjugations for the tenses listed above, in the same order.`,
+            },
+          ],
+        },
+      ],
+      generationConfig: {
+        responseMimeType: "application/json",
+        responseSchema: {
+          type: "OBJECT",
+          properties: {
+            infinitive: { type: "STRING" },
+            meaning: { type: "STRING" },
+            language: { type: "STRING" },
+            isVerb: { type: "BOOLEAN" },
+            note: { type: "STRING" },
+            tenses: {
+              type: "ARRAY",
+              items: {
+                type: "OBJECT",
+                properties: {
+                  tense: { type: "STRING" },
+                  forms: {
+                    type: "ARRAY",
+                    items: {
+                      type: "OBJECT",
+                      properties: {
+                        person: { type: "STRING" },
+                        conjugation: { type: "STRING" },
+                      },
+                      required: ["person", "conjugation"],
+                    },
+                  },
+                },
+                required: ["tense", "forms"],
+              },
+            },
+          },
+          required: ["infinitive", "meaning", "language", "isVerb", "note", "tenses"],
+        },
+      },
+    }),
+  });
+
+  if (!response.ok) {
+    const text = await response.text();
+    throw new Error(`Gemini API error: ${response.status} ${text}`);
+  }
+
+  const data = await response.json() as GeminiResponse;
+  const content = data.candidates?.[0]?.content?.parts?.[0]?.text;
+  if (!content) {
+    throw new Error("No content in Gemini response");
+  }
+
+  return JSON.parse(content) as ConjugationResult;
+}
+
 // --- Text-to-Speech via Gemini TTS ---
 
 interface TtsResponse {
