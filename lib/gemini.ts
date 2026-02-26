@@ -220,6 +220,7 @@ export interface ConjugationForm {
 export interface ConjugationTense {
   tense: string;
   forms: ConjugationForm[];
+  exampleSentence?: string;
 }
 
 export interface ConjugationResult {
@@ -275,10 +276,14 @@ export async function getLanguageTenses(language: string): Promise<string[]> {
 export async function conjugateVerb(
   verb: string,
   language: string,
-  tenses: string[]
+  tenses: string[],
+  targetLang?: string
 ): Promise<ConjugationResult> {
   const apiKey = await getApiKey();
   const langName = LANGUAGES[language as LanguageCode] ?? language;
+  const targetLangName = targetLang
+    ? (LANGUAGES[targetLang as LanguageCode] ?? targetLang)
+    : "English";
 
   const response = await fetch(`${GEMINI_ENDPOINT}?key=${apiKey}`, {
     method: "POST",
@@ -294,9 +299,10 @@ Rules:
 - If the input is not a verb, set isVerb to false and leave tenses empty.
 - Use person labels in ${langName} (e.g. for Italian: "io", "tu", "lui/lei", "noi", "voi", "loro").
 - The "infinitive" field should be the canonical infinitive form of the verb.
-- The "meaning" field should be the English translation (e.g. "to eat").
+- The "meaning" field should be the ${targetLangName} translation (e.g. "to eat").
 - The "note" field can contain edge case notes (e.g. "Chinese verbs don't conjugate") or be empty.
-- Only generate conjugations for the tenses listed above, in the same order.`,
+- Only generate conjugations for the tenses listed above, in the same order.
+- For each tense, include an "exampleSentence": a natural example sentence in ${langName} that uses the verb conjugated in that tense.`,
             },
           ],
         },
@@ -328,8 +334,9 @@ Rules:
                       required: ["person", "conjugation"],
                     },
                   },
+                  exampleSentence: { type: "STRING" },
                 },
-                required: ["tense", "forms"],
+                required: ["tense", "forms", "exampleSentence"],
               },
             },
           },
@@ -351,6 +358,86 @@ Rules:
   }
 
   return JSON.parse(content) as ConjugationResult;
+}
+
+// --- Verb Exercise Generation ---
+
+export interface VerbExerciseResult {
+  sentence: string;
+  blankedSentence: string;
+  answer: string;
+  person: string;
+  hint: string;
+  translation: string;
+}
+
+export async function generateVerbExercise(
+  infinitive: string,
+  language: string,
+  tense: string,
+  person: string,
+  conjugation: string,
+  meaning: string,
+  translationLang?: string
+): Promise<VerbExerciseResult> {
+  const apiKey = await getApiKey();
+  const langName = LANGUAGES[language as LanguageCode] ?? language;
+  const translationLangName = translationLang
+    ? (LANGUAGES[translationLang as LanguageCode] ?? translationLang)
+    : "English";
+
+  const response = await fetch(`${GEMINI_ENDPOINT}?key=${apiKey}`, {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({
+      contents: [
+        {
+          parts: [
+            {
+              text: `Generate a natural sentence in ${langName} using the verb "${infinitive}" conjugated as "${conjugation}" (${tense}, ${person}).
+
+Rules:
+- The sentence should be natural and conversational.
+- Return the full sentence with the conjugated form included.
+- Return a "blankedSentence" where the conjugated form "${conjugation}" is replaced with "___".
+- The "answer" field must be exactly "${conjugation}".
+- The "person" field must be "${person}".
+- The "hint" field should be: "${infinitive} (${meaning}) — ${tense}, ${person}".
+- The "translation" field should be the ${translationLangName} translation of the full sentence.`,
+            },
+          ],
+        },
+      ],
+      generationConfig: {
+        responseMimeType: "application/json",
+        responseSchema: {
+          type: "OBJECT",
+          properties: {
+            sentence: { type: "STRING" },
+            blankedSentence: { type: "STRING" },
+            answer: { type: "STRING" },
+            person: { type: "STRING" },
+            hint: { type: "STRING" },
+            translation: { type: "STRING" },
+          },
+          required: ["sentence", "blankedSentence", "answer", "person", "hint", "translation"],
+        },
+      },
+    }),
+  });
+
+  if (!response.ok) {
+    const text = await response.text();
+    throw new Error(`Gemini API error: ${response.status} ${text}`);
+  }
+
+  const data = await response.json() as GeminiResponse;
+  const content = data.candidates?.[0]?.content?.parts?.[0]?.text;
+  if (!content) {
+    throw new Error("No content in Gemini response");
+  }
+
+  return JSON.parse(content) as VerbExerciseResult;
 }
 
 // --- Text-to-Speech via Gemini TTS ---

@@ -20,6 +20,12 @@ export default function Navigation() {
           >
             Decks
           </Link>
+          <Link
+            href="/verbs"
+            className="text-sm text-text-muted hover:text-text transition-colors"
+          >
+            Verbs
+          </Link>
         </div>
       </div>
     </nav>

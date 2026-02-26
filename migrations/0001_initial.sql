@@ -1,4 +1,4 @@
-CREATE TABLE decks (
+CREATE TABLE IF NOT EXISTS decks (
   id TEXT PRIMARY KEY,
   name TEXT NOT NULL,
   emoji TEXT DEFAULT '📚',
@@ -7,7 +7,7 @@ CREATE TABLE decks (
   created_at TEXT DEFAULT (datetime('now'))
 );
 
-CREATE TABLE cards (
+CREATE TABLE IF NOT EXISTS cards (
   id TEXT PRIMARY KEY,
   deck_id TEXT NOT NULL REFERENCES decks(id) ON DELETE CASCADE,
   word TEXT NOT NULL,
@@ -21,5 +21,5 @@ CREATE TABLE cards (
   created_at TEXT DEFAULT (datetime('now'))
 );
 
-CREATE INDEX idx_cards_deck_id ON cards(deck_id);
-CREATE INDEX idx_cards_next_review ON cards(next_review);
+CREATE INDEX IF NOT EXISTS idx_cards_deck_id ON cards(deck_id);
+CREATE INDEX IF NOT EXISTS idx_cards_next_review ON cards(next_review);
