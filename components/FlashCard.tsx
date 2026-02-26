@@ -13,9 +13,10 @@ interface FlashCardProps {
   targetLang: string;
   nextWord?: string;
   reverseMode?: boolean;
+  skipTransition?: boolean;
 }
 
-export default function FlashCard({ card, flipped, onFlip, sourceLang, targetLang, nextWord, reverseMode }: FlashCardProps) {
+export default function FlashCard({ card, flipped, onFlip, sourceLang, targetLang, nextWord, reverseMode, skipTransition }: FlashCardProps) {
   const { speak, prefetch, isSpeaking, isSupported } = useSpeech();
   const [sentenceTranslation, setSentenceTranslation] = useState<string | null>(null);
   const [translating, setTranslating] = useState(false);
@@ -74,9 +75,9 @@ export default function FlashCard({ card, flipped, onFlip, sourceLang, targetLan
       onClick={onFlip}
     >
       <div
-        className={`preserve-3d relative w-full h-56 sm:h-64 transition-transform duration-500 ${
-          flipped ? "rotate-y-180" : ""
-        }`}
+        className={`preserve-3d relative w-full h-56 sm:h-64 ${
+          skipTransition ? "" : "transition-transform duration-500"
+        } ${flipped ? "rotate-y-180" : ""}`}
       >
         {/* Front */}
         <div className="backface-hidden absolute inset-0 bg-surface rounded-2xl border border-border shadow-lg flex flex-col items-center justify-center p-6">

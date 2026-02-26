@@ -6,7 +6,7 @@ import { useState, useCallback, useEffect, useRef } from "react";
 const audioCache = new Map<string, Blob>();
 const inflightRequests = new Map<string, Promise<Blob>>();
 
-function fetchTtsBlob(text: string, lang: string, signal?: AbortSignal): Promise<Blob> {
+export function fetchTtsBlob(text: string, lang: string, signal?: AbortSignal): Promise<Blob> {
   const cacheKey = `${lang}:${text}`;
   const cached = audioCache.get(cacheKey);
   if (cached) return Promise.resolve(cached);

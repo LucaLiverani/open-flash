@@ -28,6 +28,7 @@ const RATINGS = [
 export default function ReviewSession({ cards, isPractice, onComplete, sourceLang, targetLang, reverseMode }: ReviewSessionProps) {
   const [currentIndex, setCurrentIndex] = useState(0);
   const [flipped, setFlipped] = useState(false);
+  const [skipTransition, setSkipTransition] = useState(false);
   const resultsRef = useRef<ReviewResult[]>([]);
 
   const currentCard = cards[currentIndex];
@@ -57,8 +58,10 @@ export default function ReviewSession({ cards, isPractice, onComplete, sourceLan
       if (currentIndex + 1 >= cards.length) {
         onComplete(resultsRef.current);
       } else {
+        setSkipTransition(true);
         setCurrentIndex(currentIndex + 1);
         setFlipped(false);
+        requestAnimationFrame(() => setSkipTransition(false));
       }
     },
     [currentCard, flipped, currentIndex, cards.length, onComplete, isPractice]
@@ -102,7 +105,7 @@ export default function ReviewSession({ cards, isPractice, onComplete, sourceLan
       </div>
 
       {/* Card */}
-      <FlashCard card={currentCard} flipped={flipped} onFlip={handleFlip} sourceLang={sourceLang} targetLang={targetLang} nextWord={reverseMode ? cards[currentIndex + 1]?.translation : cards[currentIndex + 1]?.word} reverseMode={reverseMode} />
+      <FlashCard card={currentCard} flipped={flipped} onFlip={handleFlip} sourceLang={sourceLang} targetLang={targetLang} nextWord={reverseMode ? cards[currentIndex + 1]?.translation : cards[currentIndex + 1]?.word} reverseMode={reverseMode} skipTransition={skipTransition} />
 
       {/* Rating buttons */}
       {flipped && (

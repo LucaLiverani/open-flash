@@ -210,6 +210,90 @@ export async function translateSentence(
   return (JSON.parse(content) as { translation: string }).translation;
 }
 
+// --- Story Generation ---
+
+export interface StoryResult {
+  title: string;
+  sentences: string[];
+  translation: string;
+}
+
+export async function generateStory(opts: {
+  language: LanguageCode;
+  nativeLang: LanguageCode;
+  topic: string;
+  difficulty: "beginner" | "intermediate";
+  words?: string[];
+}): Promise<StoryResult> {
+  const apiKey = await getApiKey();
+  const langName = LANGUAGES[opts.language];
+  const nativeLangName = LANGUAGES[opts.nativeLang];
+
+  const wordLength = opts.difficulty === "beginner" ? "100-120" : "120-150";
+  const level =
+    opts.difficulty === "beginner"
+      ? "A1-A2 level: simple vocabulary, present tense, short sentences"
+      : "B1 level: varied vocabulary, mixed tenses, more complex sentences";
+
+  const wordsInstruction = opts.words?.length
+    ? `\nIMPORTANT: Naturally incorporate these words into the story: ${opts.words.join(", ")}. Use each word at least once.`
+    : "";
+
+  const response = await fetch(`${GEMINI_ENDPOINT}?key=${apiKey}`, {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({
+      contents: [
+        {
+          parts: [
+            {
+              text: `Write a short story in ${langName} about "${opts.topic}".
+
+Requirements:
+- ${wordLength} words total
+- ${level}
+- Split the story into individual sentences and return them as an array
+- Each array element should be exactly one sentence
+- Provide a title in ${langName}
+- Provide a full translation of the entire story in ${nativeLangName}${wordsInstruction}
+
+Return in the exact JSON format specified.`,
+            },
+          ],
+        },
+      ],
+      generationConfig: {
+        responseMimeType: "application/json",
+        responseSchema: {
+          type: "OBJECT",
+          properties: {
+            title: { type: "STRING" },
+            sentences: {
+              type: "ARRAY",
+              items: { type: "STRING" },
+            },
+            translation: { type: "STRING" },
+          },
+          required: ["title", "sentences", "translation"],
+        },
+      },
+    }),
+  });
+
+  if (!response.ok) {
+    const text = await response.text();
+    throw new Error(`Gemini API error: ${response.status} ${text}`);
+  }
+
+  const data = (await response.json()) as GeminiResponse;
+  const content = data.candidates?.[0]?.content?.parts?.[0]?.text;
+  if (!content) {
+    throw new Error("No content in Gemini response");
+  }
+
+  return JSON.parse(content) as StoryResult;
+}
+
 // --- Verb Conjugation ---
 
 export interface ConjugationForm {

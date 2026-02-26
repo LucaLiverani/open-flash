@@ -26,6 +26,12 @@ export default function Navigation() {
           >
             Verbs
           </Link>
+          <Link
+            href="/stories"
+            className="text-sm text-text-muted hover:text-text transition-colors"
+          >
+            Stories
+          </Link>
         </div>
       </div>
     </nav>
