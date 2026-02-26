@@ -1,6 +1,7 @@
 import Link from "next/link";
-import { getDB, type DeckWithCounts } from "@/lib/db";
+import { getDB, type DeckWithCounts, type VerbDeckWithCounts } from "@/lib/db";
 import DeckCard from "@/components/DeckCard";
+import VerbDeckCard from "@/components/VerbDeckCard";
 
 export const dynamic = "force-dynamic";
 
@@ -18,10 +19,6 @@ export default async function Dashboard() {
       "SELECT COUNT(*) as count FROM cards WHERE next_review <= date('now')"
     )
     .first<{ count: number }>();
-  const studied = await db
-    .prepare("SELECT COUNT(*) as count FROM cards WHERE repetitions > 0")
-    .first<{ count: number }>();
-
   const { results: recentDecks } = await db
     .prepare(
       `SELECT d.*,
@@ -35,28 +32,49 @@ export default async function Dashboard() {
     )
     .all<DeckWithCounts>();
 
+  // Verb decks with counts
+  const { results: verbDecks } = await db
+    .prepare(
+      `SELECT vd.*,
+        COUNT(sv.id) as verb_count,
+        COUNT(DISTINCT CASE
+          WHEN vsp.id IS NULL OR vsp.next_review <= date('now') THEN sv.id
+        END) as due_count
+      FROM verb_decks vd
+      LEFT JOIN saved_verbs sv ON sv.verb_deck_id = vd.id
+      LEFT JOIN verb_study_progress vsp ON vsp.saved_verb_id = sv.id
+      GROUP BY vd.id
+      ORDER BY vd.created_at DESC
+      LIMIT 6`
+    )
+    .all<VerbDeckWithCounts>();
+
+  const totalVerbsDue = verbDecks.reduce((sum, d) => sum + d.due_count, 0);
+
   const stats = [
     { label: "Decks", value: totalDecks?.count ?? 0, emoji: "📚" },
     { label: "Cards", value: totalCards?.count ?? 0, emoji: "📝" },
-    { label: "Due Today", value: dueToday?.count ?? 0, emoji: "🔥" },
-    { label: "Studied", value: studied?.count ?? 0, emoji: "✅" },
+    { label: "Cards Due", value: dueToday?.count ?? 0, emoji: "🔥" },
+    { label: "Verbs Due", value: totalVerbsDue, emoji: "📖" },
   ];
 
   const decksWithDue = recentDecks.filter((d) => d.due_count > 0);
   const decksWithCards = recentDecks.filter((d) => d.card_count > 0);
+  const verbDecksWithDue = verbDecks.filter((d) => d.due_count > 0);
+  const hasDueItems = decksWithDue.length > 0 || verbDecksWithDue.length > 0;
+  const totalDueAll = (dueToday?.count ?? 0) + totalVerbsDue;
 
   return (
     <div>
       {/* Hero: Study now */}
-      {decksWithDue.length > 0 ? (
+      {hasDueItems ? (
         <div className="mb-10">
           <div className="bg-gradient-to-r from-primary to-primary-dark rounded-2xl p-6 sm:p-8 text-black mb-4">
             <h1 className="text-2xl sm:text-3xl font-bold mb-2">
               Time to study!
             </h1>
             <p className="text-black/70 mb-6">
-              You have {dueToday?.count ?? 0} cards waiting for review across{" "}
-              {decksWithDue.length} deck{decksWithDue.length !== 1 ? "s" : ""}.
+              You have {totalDueAll} item{totalDueAll !== 1 ? "s" : ""} waiting for review.
             </p>
             <div className="space-y-3">
               {decksWithDue.map((deck) => (
@@ -71,6 +89,26 @@ export default async function Dashboard() {
                       <p className="font-semibold">{deck.name}</p>
                       <p className="text-sm text-black/60">
                         {deck.due_count} card{deck.due_count !== 1 ? "s" : ""} due
+                      </p>
+                    </div>
+                  </div>
+                  <span className="btn btn-lg bg-black text-primary font-semibold">
+                    Study now
+                  </span>
+                </Link>
+              ))}
+              {verbDecksWithDue.map((deck) => (
+                <Link
+                  key={deck.id}
+                  href={`/verbs/${deck.id}/study`}
+                  className="flex items-center justify-between bg-black/10 hover:bg-black/20 rounded-xl p-4 transition-colors"
+                >
+                  <div className="flex items-center gap-3">
+                    <span className="text-2xl">{deck.emoji}</span>
+                    <div>
+                      <p className="font-semibold">{deck.name}</p>
+                      <p className="text-sm text-black/60">
+                        {deck.due_count} verb{deck.due_count !== 1 ? "s" : ""} due
                       </p>
                     </div>
                   </div>
@@ -164,6 +202,26 @@ export default async function Dashboard() {
           <Link href="/decks/new" className="btn btn-primary btn-lg">
             Create Deck
           </Link>
+        </div>
+      )}
+
+      {/* Verb Decks */}
+      {verbDecks.length > 0 && (
+        <div className="mt-8">
+          <div className="flex items-center justify-between mb-4">
+            <h2 className="font-semibold">Verb Decks</h2>
+            <Link
+              href="/verbs"
+              className="text-sm text-primary hover:text-primary-dark transition-colors"
+            >
+              View all
+            </Link>
+          </div>
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3 sm:gap-4">
+            {verbDecks.map((deck) => (
+              <VerbDeckCard key={deck.id} deck={deck} />
+            ))}
+          </div>
         </div>
       )}
     </div>
