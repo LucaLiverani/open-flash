@@ -25,6 +25,7 @@ export default function VerbDeckDetailClient({
   const [resetStep, setResetStep] = useState<0 | 1>(0);
   const [resetting, setResetting] = useState(false);
   const [editingVerbId, setEditingVerbId] = useState<string | null>(null);
+  const [expandedVerbId, setExpandedVerbId] = useState<string | null>(null);
   const [editMeaning, setEditMeaning] = useState("");
   const [editTenses, setEditTenses] = useState<ConjugationTense[]>([]);
   const [editLoading, setEditLoading] = useState(false);
@@ -157,6 +158,7 @@ export default function VerbDeckDetailClient({
   function startEditingVerb(verb: SavedVerb) {
     const conj = JSON.parse(verb.conjugations) as ConjugationResult;
     setEditingVerbId(verb.id);
+    setExpandedVerbId(null);
     setEditMeaning(verb.meaning);
     setEditTenses(conj.tenses);
   }
@@ -459,27 +461,40 @@ export default function VerbDeckDetailClient({
                     </div>
                   </div>
                 ) : (
-                  <div className="flex items-center gap-3">
-                    <div className="flex-1 min-w-0">
-                      <span className="font-medium">{v.infinitive}</span>
-                      <span className="text-text-muted text-sm ml-2">{v.meaning}</span>
+                  <div>
+                    <div
+                      className="flex items-center gap-3 cursor-pointer"
+                      onClick={() => setExpandedVerbId(expandedVerbId === v.id ? null : v.id)}
+                    >
+                      <div className="flex-1 min-w-0">
+                        <span className="font-medium">{v.infinitive}</span>
+                        <span className="text-text-muted text-sm ml-2">{v.meaning}</span>
+                      </div>
+                      <div className="flex items-center gap-2">
+                        <button
+                          onClick={(e) => { e.stopPropagation(); startEditingVerb(v); }}
+                          className="text-text-muted hover:text-accent transition-colors text-sm"
+                          title="Edit verb"
+                        >
+                          ✎
+                        </button>
+                        <button
+                          onClick={(e) => { e.stopPropagation(); handleRemove(v.id); }}
+                          className="text-text-muted hover:text-danger transition-colors text-sm"
+                          title="Remove verb"
+                        >
+                          &times;
+                        </button>
+                      </div>
                     </div>
-                    <div className="flex items-center gap-2">
-                      <button
-                        onClick={() => startEditingVerb(v)}
-                        className="text-text-muted hover:text-accent transition-colors text-sm"
-                        title="Edit verb"
-                      >
-                        ✎
-                      </button>
-                      <button
-                        onClick={() => handleRemove(v.id)}
-                        className="text-text-muted hover:text-danger transition-colors text-sm"
-                        title="Remove verb"
-                      >
-                        &times;
-                      </button>
-                    </div>
+                    {expandedVerbId === v.id && (
+                      <div className="mt-3">
+                        <ConjugationTable
+                          tenses={(JSON.parse(v.conjugations) as ConjugationResult).tenses}
+                          language={deck.language}
+                        />
+                      </div>
+                    )}
                   </div>
                 )}
               </div>
