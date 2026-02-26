@@ -16,10 +16,14 @@ export async function POST(request: Request) {
 
   const key = cacheKey(text, lang);
 
-  // Check Cloudflare Cache first
-  const cache = (caches as unknown as { default: Cache }).default;
-  const cached = await cache.match(key);
-  if (cached) return cached;
+  // Check Cloudflare Cache (only available in Workers runtime)
+  const cache = typeof caches !== "undefined"
+    ? (caches as unknown as { default: Cache }).default
+    : null;
+  if (cache) {
+    const cached = await cache.match(key);
+    if (cached) return cached;
+  }
 
   try {
     const url = `https://translate.google.com/translate_tts?ie=UTF-8&tl=${encodeURIComponent(lang)}&client=tw-ob&q=${encodeURIComponent(text)}`;
@@ -36,7 +40,7 @@ export async function POST(request: Request) {
       },
     });
 
-    cache.put(key, response.clone()).catch(() => {});
+    cache?.put(key, response.clone()).catch(() => {});
 
     return response;
   } catch (error) {

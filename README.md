@@ -93,6 +93,22 @@ npm run dev
 
 The app will be available at `http://localhost:3000`.
 
+### Sync Local DB from Remote
+
+To pull the production Cloudflare D1 database to your local environment:
+
+```bash
+npm run db:pull
+```
+
+This exports the remote database, wipes the local copy, and imports the remote data so your local DB is a 1:1 copy of production.
+
+If you get an authentication error, re-login to refresh your OAuth token first:
+
+```bash
+npx wrangler login
+```
+
 ### Keyboard Shortcuts (Study Mode)
 
 - **Space / Enter** — Flip card

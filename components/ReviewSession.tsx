@@ -10,6 +10,7 @@ interface ReviewSessionProps {
   onComplete: (results: ReviewResult[]) => void;
   sourceLang: string;
   targetLang: string;
+  reverseMode?: boolean;
 }
 
 export interface ReviewResult {
@@ -24,7 +25,7 @@ const RATINGS = [
   { quality: 5 as const, label: "Easy", key: "4", color: "bg-primary hover:bg-primary-dark text-black" },
 ];
 
-export default function ReviewSession({ cards, isPractice, onComplete, sourceLang, targetLang }: ReviewSessionProps) {
+export default function ReviewSession({ cards, isPractice, onComplete, sourceLang, targetLang, reverseMode }: ReviewSessionProps) {
   const [currentIndex, setCurrentIndex] = useState(0);
   const [flipped, setFlipped] = useState(false);
   const resultsRef = useRef<ReviewResult[]>([]);
@@ -101,7 +102,7 @@ export default function ReviewSession({ cards, isPractice, onComplete, sourceLan
       </div>
 
       {/* Card */}
-      <FlashCard card={currentCard} flipped={flipped} onFlip={handleFlip} sourceLang={sourceLang} targetLang={targetLang} nextWord={cards[currentIndex + 1]?.word} />
+      <FlashCard card={currentCard} flipped={flipped} onFlip={handleFlip} sourceLang={sourceLang} targetLang={targetLang} nextWord={reverseMode ? cards[currentIndex + 1]?.translation : cards[currentIndex + 1]?.word} reverseMode={reverseMode} />
 
       {/* Rating buttons */}
       {flipped && (

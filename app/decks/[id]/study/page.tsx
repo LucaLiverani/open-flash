@@ -25,15 +25,36 @@ function shuffleAndPrioritize(cards: Card[]): Card[] {
 
 const PRACTICE_COUNTS = [10, 20, 30, 50, 0] as const;
 
+function ReverseToggle({ reverseMode, onToggle }: { reverseMode: boolean; onToggle: () => void }) {
+  return (
+    <button
+      onClick={onToggle}
+      className={`inline-flex items-center gap-2 px-4 py-2 rounded-lg border text-sm transition-colors ${
+        reverseMode
+          ? "bg-primary/10 border-primary/30 text-primary"
+          : "bg-surface border-border text-text-muted hover:border-primary/30"
+      }`}
+    >
+      <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+        <path d="M7 16V4m0 0L3 8m4-4l4 4M17 8v12m0 0l4-4m-4 4l-4-4" />
+      </svg>
+      {reverseMode ? "Reverse mode" : "Normal mode"}
+    </button>
+  );
+}
+
 export default function StudyPage() {
   const params = useParams<{ id: string }>();
   const [allCards, setAllCards] = useState<Card[]>([]);
+  const [dueCards, setDueCards] = useState<Card[]>([]);
   const [cards, setCards] = useState<Card[]>([]);
   const [loading, setLoading] = useState(true);
   const [mode, setMode] = useState<"due" | "all" | null>(null);
+  const [started, setStarted] = useState(false);
   const [results, setResults] = useState<ReviewResult[] | null>(null);
   const [sourceLang, setSourceLang] = useState("");
   const [targetLang, setTargetLang] = useState("");
+  const [reverseMode, setReverseMode] = useState(false);
 
   useEffect(() => {
     async function load() {
@@ -51,8 +72,7 @@ export default function StudyPage() {
         if (dueRes.ok) {
           const data = await dueRes.json() as Card[];
           if (data.length > 0) {
-            setCards(data);
-            setMode("due");
+            setDueCards(data);
           } else {
             // Pre-fetch all cards for practice options
             const allRes = await fetch(`/api/cards?deck_id=${params.id}`);
@@ -70,11 +90,18 @@ export default function StudyPage() {
     load();
   }, [params.id]);
 
+  function startDueReview() {
+    setCards(dueCards);
+    setMode("due");
+    setStarted(true);
+  }
+
   function startPractice(count: number) {
     const shuffled = shuffleAndPrioritize(allCards);
     const selected = count === 0 ? shuffled : shuffled.slice(0, count);
     setCards(selected);
     setMode("all");
+    setStarted(true);
   }
 
   const handleComplete = useCallback((reviewResults: ReviewResult[]) => {
@@ -83,8 +110,37 @@ export default function StudyPage() {
 
   if (loading) return <LoadingSpinner text="Loading study session..." />;
 
+  // Pre-session screen for due cards
+  if (dueCards.length > 0 && !started) {
+    return (
+      <div className="max-w-md mx-auto text-center py-10">
+        <span className="text-5xl mb-4 block">📋</span>
+        <h1 className="text-2xl font-bold mb-2">Cards Due for Review</h1>
+        <p className="text-text-muted mb-6">
+          You have {dueCards.length} card{dueCards.length !== 1 ? "s" : ""} to review today.
+        </p>
+        <div className="flex justify-center mb-6">
+          <ReverseToggle reverseMode={reverseMode} onToggle={() => setReverseMode((r) => !r)} />
+        </div>
+        <p className="text-xs text-text-muted mb-6">
+          {reverseMode
+            ? "You\u2019ll see the meaning and guess the word."
+            : "You\u2019ll see the word and guess the meaning."}
+        </p>
+        <div className="flex gap-3 justify-center">
+          <Link href={`/decks/${params.id}`} className="btn btn-ghost">
+            Back to Deck
+          </Link>
+          <button onClick={startDueReview} className="btn btn-primary">
+            Start Review
+          </button>
+        </div>
+      </div>
+    );
+  }
+
   // No due cards and haven't chosen practice mode yet
-  if (mode === null) {
+  if (!started && mode === null) {
     if (allCards.length === 0) {
       return (
         <EmptyState
@@ -106,6 +162,14 @@ export default function StudyPage() {
         </p>
         <p className="text-sm text-text-muted mb-4">
           Cards are shuffled with harder ones first.
+        </p>
+        <div className="flex justify-center mb-4">
+          <ReverseToggle reverseMode={reverseMode} onToggle={() => setReverseMode((r) => !r)} />
+        </div>
+        <p className="text-xs text-text-muted mb-6">
+          {reverseMode
+            ? "You\u2019ll see the meaning and guess the word."
+            : "You\u2019ll see the word and guess the meaning."}
         </p>
         <div className="flex flex-wrap gap-2 justify-center mb-6">
           {PRACTICE_COUNTS.map((count) => {
@@ -182,14 +246,15 @@ export default function StudyPage() {
               setResults(null);
               setMode(null);
               setCards([]);
+              setStarted(false);
               setLoading(true);
               fetch(`/api/decks/${params.id}/due`)
                 .then((r) => r.json() as Promise<Card[]>)
                 .then(async (data) => {
                   if (data.length > 0) {
-                    setCards(data);
-                    setMode("due");
+                    setDueCards(data);
                   } else {
+                    setDueCards([]);
                     const allRes = await fetch(`/api/cards?deck_id=${params.id}`);
                     if (allRes.ok) {
                       setAllCards(await allRes.json() as Card[]);
@@ -211,10 +276,10 @@ export default function StudyPage() {
     <div className="max-w-md mx-auto">
       {mode === "all" && (
         <p className="text-center text-sm text-text-muted mb-4">
-          Practice mode — {cards.length} cards, hardest first
+          Practice mode{reverseMode ? " (reverse)" : ""} — {cards.length} cards, hardest first
         </p>
       )}
-      <ReviewSession cards={cards} isPractice={mode === "all"} onComplete={handleComplete} sourceLang={sourceLang} targetLang={targetLang} />
+      <ReviewSession cards={cards} isPractice={mode === "all"} onComplete={handleComplete} sourceLang={sourceLang} targetLang={targetLang} reverseMode={reverseMode} />
     </div>
   );
 }
