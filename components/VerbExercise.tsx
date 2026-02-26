@@ -2,6 +2,8 @@
 
 import { useState, useRef, useEffect } from "react";
 import { isAnswerCorrect } from "@/lib/accent";
+import { useSpeech } from "@/lib/useSpeech";
+import SpeakButton from "./SpeakButton";
 
 export interface ExerciseData {
   sentence: string;
@@ -22,9 +24,12 @@ interface VerbExerciseProps {
   total: number;
   onResult: (correct: boolean, userAnswer: string) => void;
   onChecked?: (correct: boolean) => void;
+  language?: string;
+  translationLang?: string;
 }
 
-export default function VerbExercise({ exercise, current, total, onResult, onChecked }: VerbExerciseProps) {
+export default function VerbExercise({ exercise, current, total, onResult, onChecked, language, translationLang }: VerbExerciseProps) {
+  const { speak, isSpeaking, isSupported } = useSpeech();
   const [userAnswer, setUserAnswer] = useState("");
   const [submitted, setSubmitted] = useState(false);
   const [correct, setCorrect] = useState(false);
@@ -143,8 +148,26 @@ export default function VerbExercise({ exercise, current, total, onResult, onChe
             </div>
           )}
           <div className="bg-surface rounded-lg border border-border p-3 text-center">
-            <p className="text-sm text-text-muted">{exercise.sentence}</p>
-            <p className="text-sm text-text-muted italic mt-1">{exercise.translation}</p>
+            <div className="flex items-center justify-center gap-1">
+              <p className="text-sm text-text-muted">{exercise.sentence}</p>
+              {language && (
+                <SpeakButton
+                  onClick={() => speak(exercise.sentence, language)}
+                  isSpeaking={isSpeaking}
+                  isSupported={isSupported}
+                />
+              )}
+            </div>
+            <div className="flex items-center justify-center gap-1 mt-1">
+              <p className="text-sm text-text-muted italic">{exercise.translation}</p>
+              {translationLang && (
+                <SpeakButton
+                  onClick={() => speak(exercise.translation, translationLang)}
+                  isSpeaking={isSpeaking}
+                  isSupported={isSupported}
+                />
+              )}
+            </div>
           </div>
           <button
             onClick={handleSubmit}

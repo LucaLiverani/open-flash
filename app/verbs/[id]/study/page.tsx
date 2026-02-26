@@ -104,7 +104,7 @@ export default function VerbDeckStudyLauncher() {
     const params = new URLSearchParams({
       tense: selectedTense,
       mode,
-      ...(deck ? { tlang: deck.translation_lang } : {}),
+      ...(deck ? { tlang: deck.translation_lang, lang: deck.language } : {}),
     });
     router.push(`/verbs/${deckId}/study/session?${params.toString()}`);
   };

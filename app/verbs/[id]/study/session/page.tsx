@@ -22,6 +22,7 @@ export default function VerbDeckStudySession() {
   const tense = searchParams.get("tense") ?? "";
   const mode = searchParams.get("mode") as "due" | "practice";
   const translationLang = searchParams.get("tlang") ?? "";
+  const language = searchParams.get("lang") ?? "";
 
   const [state, setState] = useState<SessionState>("loading");
   const [queue, setQueue] = useState<DueVerb[]>([]);
@@ -254,6 +255,8 @@ export default function VerbDeckStudySession() {
         total={totalExercises}
         onResult={handleResult}
         onChecked={handleChecked}
+        language={language}
+        translationLang={translationLang}
       />
     </div>
   );
