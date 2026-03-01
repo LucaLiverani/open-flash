@@ -1,8 +1,10 @@
 "use client";
 
-import { useState, useCallback, useRef } from "react";
+import { useState } from "react";
 import { useStoryPlayer } from "@/lib/useStoryPlayer";
+import { useLongPressTooltip } from "@/lib/useLongPressTooltip";
 import WordTooltip from "./WordTooltip";
+import WordSpans from "./WordSpans";
 
 interface StoryPlayerProps {
   title: string;
@@ -11,11 +13,6 @@ interface StoryPlayerProps {
   language: string;
   nativeLang: string;
   onNewStory: () => void;
-}
-
-interface TooltipState {
-  word: string;
-  rect: DOMRect;
 }
 
 export default function StoryPlayer({
@@ -29,54 +26,14 @@ export default function StoryPlayer({
   const { activeSentenceIndex, isPlaying, play, pause, jumpTo, stop } =
     useStoryPlayer(sentences, language);
   const [showTranslation, setShowTranslation] = useState(false);
-  const [tooltip, setTooltip] = useState<TooltipState | null>(null);
 
-  // Long-press to pause
-  const longPressTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
-  const longPressTriggered = useRef(false);
-
-  const handleTouchStart = useCallback(() => {
-    longPressTriggered.current = false;
-    longPressTimer.current = setTimeout(() => {
-      longPressTriggered.current = true;
-      if (isPlaying) pause();
-    }, 500);
-  }, [isPlaying, pause]);
-
-  const handleTouchEnd = useCallback(() => {
-    if (longPressTimer.current) {
-      clearTimeout(longPressTimer.current);
-      longPressTimer.current = null;
-    }
-    if (longPressTriggered.current) play();
-  }, [play]);
-
-  const handleTouchMove = useCallback(() => {
-    if (longPressTimer.current) {
-      clearTimeout(longPressTimer.current);
-      longPressTimer.current = null;
-    }
-  }, []);
-
-  const handleWordClick = useCallback(
-    (e: React.MouseEvent<HTMLSpanElement>, word: string) => {
-      e.stopPropagation();
-      if (longPressTriggered.current) return;
-      const cleaned = word.replace(/[.,;:!?"""''()[\]{}]/g, "").trim();
-      if (!cleaned) return;
-      const rect = (e.target as HTMLElement).getBoundingClientRect();
-      setTooltip({ word: cleaned, rect });
-    },
-    []
-  );
-
-  const handleSentenceClick = useCallback(
-    (index: number) => {
-      if (longPressTriggered.current) return;
-      jumpTo(index);
-    },
-    [jumpTo]
-  );
+  const {
+    tooltip,
+    dismissTooltip,
+    containerTouchHandlers,
+    handleWordClick,
+    handleSentenceClick,
+  } = useLongPressTooltip({ isPlaying, pause, play, jumpTo });
 
   return (
     <div className="space-y-6">
@@ -126,9 +83,7 @@ export default function StoryPlayer({
       {/* Story text — long-press to pause audio */}
       <div
         className="bg-surface rounded-xl border border-border p-4 sm:p-5 text-lg leading-relaxed select-none"
-        onTouchStart={handleTouchStart}
-        onTouchEnd={handleTouchEnd}
-        onTouchMove={handleTouchMove}
+        {...containerTouchHandlers}
       >
         {sentences.map((sentence, sIndex) => (
           <span
@@ -140,20 +95,7 @@ export default function StoryPlayer({
                 : "hover:bg-surface-hover"
             }`}
           >
-            {sentence.split(/(\s+)/).map((token, tIndex) => {
-              if (/^\s+$/.test(token)) {
-                return <span key={tIndex}>{token}</span>;
-              }
-              return (
-                <span
-                  key={tIndex}
-                  onClick={(e) => handleWordClick(e, token)}
-                  className="cursor-pointer hover:bg-primary/10 active:bg-primary/20 rounded px-0.5 transition-colors"
-                >
-                  {token}
-                </span>
-              );
-            })}{" "}
+            <WordSpans sentence={sentence} onWordClick={handleWordClick} />{" "}
           </span>
         ))}
       </div>
@@ -172,7 +114,7 @@ export default function StoryPlayer({
           rect={tooltip.rect}
           sourceLang={language}
           targetLang={nativeLang}
-          onDismiss={() => setTooltip(null)}
+          onDismiss={dismissTooltip}
         />
       )}
     </div>
