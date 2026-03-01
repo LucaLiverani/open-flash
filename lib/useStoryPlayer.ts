@@ -6,17 +6,25 @@ import { fetchTtsBlob } from "./useSpeech";
 export function useStoryPlayer(sentences: string[], lang: string) {
   const [activeSentenceIndex, setActiveSentenceIndex] = useState(-1);
   const [isPlaying, setIsPlaying] = useState(false);
+  // Persistent Audio element — reused across sentences so mobile browsers
+  // don't block playback (new Audio() outside a user-gesture is blocked).
   const audioRef = useRef<HTMLAudioElement | null>(null);
   const urlRef = useRef<string | null>(null);
   const pausedRef = useRef(false);
   const stoppedRef = useRef(false);
+
+  const getAudio = useCallback(() => {
+    if (!audioRef.current) {
+      audioRef.current = new Audio();
+    }
+    return audioRef.current;
+  }, []);
 
   const cleanup = useCallback(() => {
     if (audioRef.current) {
       audioRef.current.pause();
       audioRef.current.onended = null;
       audioRef.current.onerror = null;
-      audioRef.current = null;
     }
     if (urlRef.current) {
       URL.revokeObjectURL(urlRef.current);
@@ -60,23 +68,27 @@ export function useStoryPlayer(sentences: string[], lang: string) {
         const url = URL.createObjectURL(blob);
         urlRef.current = url;
 
-        const audio = new Audio(url);
-        audioRef.current = audio;
+        const audio = getAudio();
 
         audio.onended = () => {
-          URL.revokeObjectURL(url);
-          urlRef.current = null;
+          if (urlRef.current === url) {
+            URL.revokeObjectURL(url);
+            urlRef.current = null;
+          }
           if (!pausedRef.current && !stoppedRef.current) {
             playSentence(index + 1);
           }
         };
 
         audio.onerror = () => {
-          URL.revokeObjectURL(url);
-          urlRef.current = null;
+          if (urlRef.current === url) {
+            URL.revokeObjectURL(url);
+            urlRef.current = null;
+          }
           setIsPlaying(false);
         };
 
+        audio.src = url;
         await audio.play();
       } catch {
         if (!stoppedRef.current) {
@@ -84,19 +96,22 @@ export function useStoryPlayer(sentences: string[], lang: string) {
         }
       }
     },
-    [sentences, lang, cleanup, prefetchSentence]
+    [sentences, lang, cleanup, prefetchSentence, getAudio]
   );
 
   const play = useCallback(() => {
-    if (audioRef.current && pausedRef.current) {
+    // Ensure Audio element is created inside the user-gesture callback
+    // so mobile browsers consider it "unlocked" for future play() calls.
+    const audio = getAudio();
+    if (pausedRef.current) {
       pausedRef.current = false;
       setIsPlaying(true);
-      audioRef.current.play();
+      audio.play();
     } else {
       const startIndex = activeSentenceIndex >= 0 ? activeSentenceIndex : 0;
       playSentence(startIndex);
     }
-  }, [activeSentenceIndex, playSentence]);
+  }, [activeSentenceIndex, playSentence, getAudio]);
 
   const pause = useCallback(() => {
     pausedRef.current = true;
@@ -125,6 +140,7 @@ export function useStoryPlayer(sentences: string[], lang: string) {
     return () => {
       stoppedRef.current = true;
       cleanup();
+      audioRef.current = null;
     };
   }, [cleanup]);
 

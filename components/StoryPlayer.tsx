@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useCallback } from "react";
+import { useState, useCallback, useRef } from "react";
 import { useStoryPlayer } from "@/lib/useStoryPlayer";
 import WordTooltip from "./WordTooltip";
 
@@ -31,9 +31,37 @@ export default function StoryPlayer({
   const [showTranslation, setShowTranslation] = useState(false);
   const [tooltip, setTooltip] = useState<TooltipState | null>(null);
 
+  // Long-press to pause
+  const longPressTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
+  const longPressTriggered = useRef(false);
+
+  const handleTouchStart = useCallback(() => {
+    longPressTriggered.current = false;
+    longPressTimer.current = setTimeout(() => {
+      longPressTriggered.current = true;
+      if (isPlaying) pause();
+    }, 500);
+  }, [isPlaying, pause]);
+
+  const handleTouchEnd = useCallback(() => {
+    if (longPressTimer.current) {
+      clearTimeout(longPressTimer.current);
+      longPressTimer.current = null;
+    }
+    if (longPressTriggered.current) play();
+  }, [play]);
+
+  const handleTouchMove = useCallback(() => {
+    if (longPressTimer.current) {
+      clearTimeout(longPressTimer.current);
+      longPressTimer.current = null;
+    }
+  }, []);
+
   const handleWordClick = useCallback(
     (e: React.MouseEvent<HTMLSpanElement>, word: string) => {
       e.stopPropagation();
+      if (longPressTriggered.current) return;
       const cleaned = word.replace(/[.,;:!?"""''()[\]{}]/g, "").trim();
       if (!cleaned) return;
       const rect = (e.target as HTMLElement).getBoundingClientRect();
@@ -44,6 +72,7 @@ export default function StoryPlayer({
 
   const handleSentenceClick = useCallback(
     (index: number) => {
+      if (longPressTriggered.current) return;
       jumpTo(index);
     },
     [jumpTo]
@@ -66,7 +95,7 @@ export default function StoryPlayer({
       </div>
 
       {/* Playback controls */}
-      <div className="flex items-center gap-3">
+      <div className="flex items-center flex-wrap gap-3">
         {isPlaying ? (
           <button onClick={pause} className="btn btn-primary">
             Pause
@@ -94,8 +123,13 @@ export default function StoryPlayer({
         </label>
       </div>
 
-      {/* Story text */}
-      <div className="bg-surface rounded-xl border border-border p-5 text-lg leading-relaxed">
+      {/* Story text — long-press to pause audio */}
+      <div
+        className="bg-surface rounded-xl border border-border p-4 sm:p-5 text-lg leading-relaxed select-none"
+        onTouchStart={handleTouchStart}
+        onTouchEnd={handleTouchEnd}
+        onTouchMove={handleTouchMove}
+      >
         {sentences.map((sentence, sIndex) => (
           <span
             key={sIndex}
@@ -114,7 +148,7 @@ export default function StoryPlayer({
                 <span
                   key={tIndex}
                   onClick={(e) => handleWordClick(e, token)}
-                  className="cursor-pointer hover:bg-primary/10 rounded px-0.5 transition-colors"
+                  className="cursor-pointer hover:bg-primary/10 active:bg-primary/20 rounded px-0.5 transition-colors"
                 >
                   {token}
                 </span>
