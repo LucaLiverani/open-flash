@@ -1,9 +1,13 @@
 "use client";
 
-import { useState, useRef, useEffect } from "react";
+import { useState, useRef, useEffect, useCallback } from "react";
 import { isAnswerCorrect } from "@/lib/accent";
 import { useSpeech } from "@/lib/useSpeech";
 import SpeakButton from "./SpeakButton";
+import WordSpans from "./WordSpans";
+import WordTooltip from "./WordTooltip";
+import AddToVocabDeckModal from "./AddToVocabDeckModal";
+import AddToVerbDeckModal from "./AddToVerbDeckModal";
 
 export interface ExerciseData {
   sentence: string;
@@ -35,10 +39,44 @@ export default function VerbExercise({ exercise, current, total, onResult, onChe
   const [correct, setCorrect] = useState(false);
   const inputRef = useRef<HTMLInputElement>(null);
 
+  // Word tooltip state
+  const [tooltip, setTooltip] = useState<{ word: string; rect: DOMRect } | null>(null);
+  const [addWordModal, setAddWordModal] = useState<{ word: string; translation: string; sentence: string } | null>(null);
+  const [addVerbModal, setAddVerbModal] = useState<{ word: string } | null>(null);
+  const [toast, setToast] = useState<string | null>(null);
+
+  const handleWordClick = useCallback((e: React.MouseEvent<HTMLSpanElement>, word: string) => {
+    e.stopPropagation();
+    const cleaned = word.replace(/[.,;:!?"""''()[\]{}¡¿«»]/g, "").trim();
+    if (!cleaned) return;
+    const rect = (e.target as HTMLElement).getBoundingClientRect();
+    setTooltip({ word: cleaned, rect });
+  }, []);
+
+  function openWordModal(word: string, trans: string) {
+    setTooltip(null);
+    setAddWordModal({ word, translation: trans, sentence: exercise.sentence });
+  }
+
+  function openVerbModal(word: string) {
+    setTooltip(null);
+    setAddVerbModal({ word });
+  }
+
+  function handleModalClose(successMessage?: string) {
+    setAddWordModal(null);
+    setAddVerbModal(null);
+    if (successMessage) {
+      setToast(successMessage);
+      setTimeout(() => setToast(null), 2500);
+    }
+  }
+
   useEffect(() => {
     setUserAnswer("");
     setSubmitted(false);
     setCorrect(false);
+    setTooltip(null);
     inputRef.current?.focus();
   }, [exercise]);
 
@@ -86,7 +124,7 @@ export default function VerbExercise({ exercise, current, total, onResult, onChe
       {/* Blanked sentence */}
       <div className="text-center mb-6">
         <p className="text-xl sm:text-2xl leading-relaxed">
-          {parts[0]}
+          <WordSpans sentence={parts[0]} onWordClick={handleWordClick} />
           {submitted ? (
             <span
               className={`font-bold px-1 rounded ${
@@ -102,7 +140,7 @@ export default function VerbExercise({ exercise, current, total, onResult, onChe
               &nbsp;
             </span>
           )}
-          {parts[1]}
+          <WordSpans sentence={parts[1]} onWordClick={handleWordClick} />
         </p>
       </div>
 
@@ -130,6 +168,47 @@ export default function VerbExercise({ exercise, current, total, onResult, onChe
         </div>
       )}
 
+      {/* Word tooltip */}
+      {tooltip && language && translationLang && (
+        <WordTooltip
+          word={tooltip.word}
+          rect={tooltip.rect}
+          sourceLang={language}
+          targetLang={translationLang}
+          onDismiss={() => setTooltip(null)}
+          onAddAsWord={openWordModal}
+          onAddAsVerb={openVerbModal}
+        />
+      )}
+
+      {/* Add word modal */}
+      {addWordModal && language && translationLang && (
+        <AddToVocabDeckModal
+          word={addWordModal.word}
+          translation={addWordModal.translation}
+          exampleSentence={addWordModal.sentence}
+          sourceLang={language}
+          targetLang={translationLang}
+          onClose={handleModalClose}
+        />
+      )}
+
+      {/* Add verb modal */}
+      {addVerbModal && language && (
+        <AddToVerbDeckModal
+          word={addVerbModal.word}
+          language={language}
+          onClose={handleModalClose}
+        />
+      )}
+
+      {/* Toast */}
+      {toast && (
+        <div className="fixed bottom-6 left-1/2 -translate-x-1/2 bg-surface border border-border rounded-lg px-4 py-2 text-sm text-text shadow-lg z-50 pointer-events-none">
+          {toast}
+        </div>
+      )}
+
       {/* Result feedback */}
       {submitted && (
         <div className="space-y-3 mb-6">
@@ -149,7 +228,9 @@ export default function VerbExercise({ exercise, current, total, onResult, onChe
           )}
           <div className="bg-surface rounded-lg border border-border p-3 text-center">
             <div className="flex items-center justify-center gap-1">
-              <p className="text-sm text-text-muted">{exercise.sentence}</p>
+              <p className="text-sm text-text-muted">
+                <WordSpans sentence={exercise.sentence} onWordClick={handleWordClick} />
+              </p>
               {language && (
                 <SpeakButton
                   onClick={() => speak(exercise.sentence, language)}
