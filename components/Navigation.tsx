@@ -32,6 +32,12 @@ export default function Navigation() {
           >
             Stories
           </Link>
+          <Link
+            href="/shadowing"
+            className="text-sm text-text-muted hover:text-text transition-colors"
+          >
+            Shadowing
+          </Link>
         </div>
       </div>
     </nav>

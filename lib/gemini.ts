@@ -537,7 +537,7 @@ interface TtsResponse {
 
 const MAX_TTS_RETRIES = 2;
 
-export async function textToSpeech(text: string, lang: string): Promise<Uint8Array> {
+export async function textToSpeech(text: string, lang: string, voice: string = "Kore"): Promise<Uint8Array> {
   const apiKey = await getApiKey();
 
   const langName = LANGUAGES[lang as LanguageCode] ?? lang;
@@ -549,7 +549,7 @@ export async function textToSpeech(text: string, lang: string): Promise<Uint8Arr
       responseModalities: ["AUDIO"],
       speechConfig: {
         voiceConfig: {
-          prebuiltVoiceConfig: { voiceName: "Kore" },
+          prebuiltVoiceConfig: { voiceName: voice },
         },
       },
     },
@@ -598,6 +598,67 @@ export async function textToSpeech(text: string, lang: string): Promise<Uint8Arr
   }
 
   throw lastError!;
+}
+
+// --- Bulk Chapter Translation ---
+
+export async function translateChapterBulk(
+  sentences: string[],
+  sourceLang: LanguageCode,
+  targetLang: LanguageCode
+): Promise<string[]> {
+  const apiKey = await getApiKey();
+  const sourceName = LANGUAGES[sourceLang];
+  const targetName = LANGUAGES[targetLang];
+
+  const numbered = sentences
+    .map((s, i) => `${i + 1}. ${s}`)
+    .join("\n");
+
+  const response = await fetch(`${GEMINI_ENDPOINT}?key=${apiKey}`, {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({
+      contents: [
+        {
+          parts: [
+            {
+              text: `Translate each of the following ${sourceName} sentences to ${targetName}. Return an array of strings where each element is the translation of the corresponding numbered sentence. Maintain the same order and count.
+
+${numbered}`,
+            },
+          ],
+        },
+      ],
+      generationConfig: {
+        responseMimeType: "application/json",
+        responseSchema: {
+          type: "ARRAY",
+          items: { type: "STRING" },
+        },
+      },
+    }),
+  });
+
+  if (!response.ok) {
+    const text = await response.text();
+    throw new Error(`Gemini API error: ${response.status} ${text}`);
+  }
+
+  const data = (await response.json()) as GeminiResponse;
+  const content = data.candidates?.[0]?.content?.parts?.[0]?.text;
+  if (!content) {
+    throw new Error("No content in Gemini response");
+  }
+
+  const translations = JSON.parse(content) as string[];
+  if (translations.length !== sentences.length) {
+    console.warn(
+      `Translation count mismatch: expected ${sentences.length}, got ${translations.length}`
+    );
+  }
+
+  return translations;
 }
 
 function pcmToWav(
