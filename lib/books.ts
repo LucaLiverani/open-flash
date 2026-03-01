@@ -1,6 +1,7 @@
 // --- Book Types ---
 
 export interface BookSentence {
+  id: string;
   text: string;
   translations?: Record<string, string>;
 }

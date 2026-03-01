@@ -18,9 +18,17 @@
  * Output is written to stdout as JSON. Redirect to data/books/<slug>.json.
  */
 
+import * as crypto from "crypto";
 import * as fs from "fs";
 
+function sentenceId(chapterNumber: number, sentenceIndex: number, text: string): string {
+  const hash = crypto.createHash("sha256");
+  hash.update(`${chapterNumber}:${sentenceIndex}:${text}`);
+  return hash.digest("hex").substring(0, 8);
+}
+
 interface BookSentence {
+  id: string;
   text: string;
 }
 
@@ -116,7 +124,10 @@ function main() {
   const chapters: BookChapter[] = rawChapters.map((ch, i) => ({
     number: i + 1,
     title: ch.title,
-    sentences: splitIntoSentences(ch.body).map((text) => ({ text })),
+    sentences: splitIntoSentences(ch.body).map((text, si) => ({
+      id: sentenceId(i + 1, si, text),
+      text,
+    })),
   }));
 
   const totalSentences = chapters.reduce(

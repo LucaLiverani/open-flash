@@ -13,113 +13,778 @@
       "number": 1,
       "title": "Que trata de la condición y ejercicio del famoso hidalgo don Quijote de la Mancha",
       "sentences": [
-        { "text": "En un lugar de la Mancha, de cuyo nombre no quiero acordarme, no ha mucho tiempo que vivía un hidalgo de los de lanza en astillero, adarga antigua, rocín flaco y galgo corredor." },
-        { "text": "Una olla de algo más vaca que carnero, salpicón las más noches, duelos y quebrantos los sábados, lentejas los viernes, algún palomino de añadidura los domingos, consumían las tres partes de su hacienda." },
-        { "text": "El resto della concluían sayo de velarte, calzas de velludo para las fiestas con sus pantuflos de lo mismo, y los días de entre semana se honraba con su vellorí de lo más fino." },
-        { "text": "Tenía en su casa una ama que pasaba de los cuarenta, y una sobrina que no llegaba a los veinte, y un mozo de campo y plaza, que así ensillaba el rocín como tomaba la podadera." },
-        { "text": "Frisaba la edad de nuestro hidalgo con los cincuenta años." },
-        { "text": "Era de complexión recia, seco de carnes, enjuto de rostro, gran madrugador y amigo de la caza." },
-        { "text": "Quieren decir que tenía el sobrenombre de Quijada o Quesada, que en esto hay alguna diferencia en los autores que deste caso escriben." },
-        { "text": "Aunque por conjeturas verosímiles se deja entender que se llamaba Quejana." },
-        { "text": "Pero esto importa poco a nuestro cuento: basta que en la narración dél no se salga un punto de la verdad." },
-        { "text": "Es, pues, de saber que este sobredicho hidalgo, los ratos que estaba ocioso, que eran los más del año, se daba a leer libros de caballerías con tanta afición y gusto, que olvidó casi de todo punto el ejercicio de la caza, y aun la administración de su hacienda." },
-        { "text": "Y llegó a tanto su curiosidad y desatino en esto, que vendió muchas hanegas de tierra de sembradura para comprar libros de caballerías en que leer." },
-        { "text": "Y así, llevó a su casa todos cuantos pudo haber dellos." },
-        { "text": "Y de todos, ningunos le parecían tan bien como los que compuso el famoso Feliciano de Silva." },
-        { "text": "Porque la claridad de su prosa y aquellas entricadas razones suyas le parecían de perlas." },
-        { "text": "En resolución, él se enfrascó tanto en su lectura, que se le pasaban las noches leyendo de claro en claro, y los días de turbio en turbio." },
-        { "text": "Y así, del poco dormir y del mucho leer, se le secó el celebro de manera que vino a perder el juicio." },
-        { "text": "Llenósele la fantasía de todo aquello que leía en los libros, así de encantamientos como de pendencias, batallas, desafíos, heridas, requiebros, amores, tormentas y disparates imposibles." },
-        { "text": "Y asentósele de tal modo en la imaginación que era verdad toda aquella máquina de aquellas soñadas invenciones que leía, que para él no había otra historia más cierta en el mundo." },
-        { "text": "Decía él que el Cid Ruy Díaz había sido muy buen caballero, pero que no tenía que ver con el Caballero de la Ardiente Espada." },
-        { "text": "En efecto, rematado ya su juicio, vino a dar en el más extraño pensamiento que jamás dio loco en el mundo." },
-        { "text": "Y fue que le pareció convenible y necesario, así para el aumento de su honra como para el servicio de su república, hacerse caballero andante." },
-        { "text": "E irse por todo el mundo con sus armas y caballo a buscar las aventuras y a ejercitarse en todo aquello que él había leído que los caballeros andantes se ejercitaban." },
-        { "text": "Deshaciendo todo género de agravio, y poniéndose en ocasiones y peligros donde, acabándolos, cobrase eterno nombre y fama." },
-        { "text": "Imaginábase el pobre ya coronado por el valor de su brazo, por lo menos del imperio de Trapisonda." },
-        { "text": "Y así, con estos tan agradables pensamientos, llevado del extraño gusto que en ellos sentía, se dio priesa a poner en efecto lo que deseaba." }
+        {
+          "id": "50a2b136",
+          "text": "En un lugar de la Mancha, de cuyo nombre no quiero acordarme, no ha mucho tiempo que vivía un hidalgo de los de lanza en astillero, adarga antigua, rocín flaco y galgo corredor.",
+          "translations": {
+            "it": "In un luogo della Mancha, di cui non voglio ricordare il nome, non molto tempo fa viveva un hidalgo di quelli con lancia nella rastrelliera, scudo antico, ronzino magro e levriero corridore.",
+            "en": "In a village in La Mancha, whose name I do not wish to recall, not long ago there lived a gentleman of the kind with a lance in the rack, an old shield, a skinny horse, and a swift greyhound."
+          }
+        },
+        {
+          "id": "cb441392",
+          "text": "Una olla de algo más vaca que carnero, salpicón las más noches, duelos y quebrantos los sábados, lentejas los viernes, algún palomino de añadidura los domingos, consumían las tres partes de su hacienda.",
+          "translations": {
+            "it": "Uno stufato con più manzo che montone, carne fredda quasi tutte le sere, uova con lardo il sabato, lenticchie il venerdì, qualche piccione in più la domenica, consumavano tre quarti della sua rendita.",
+            "en": "A stew with more beef than mutton, cold meat most nights, eggs and bacon on Saturdays, lentils on Fridays, and perhaps a young pigeon on Sundays consumed three quarters of his income."
+          }
+        },
+        {
+          "id": "90f60c8a",
+          "text": "El resto della concluían sayo de velarte, calzas de velludo para las fiestas con sus pantuflos de lo mismo, y los días de entre semana se honraba con su vellorí de lo más fino.",
+          "translations": {
+            "it": "Il resto lo spendeva in un farsetto di panno fine, calze di velluto per le feste con le pantofole dello stesso, e nei giorni feriali si faceva onore con il suo panno più fino.",
+            "en": "The rest was spent on a doublet of fine cloth, velvet breeches for holidays with matching slippers, and on weekdays he honored himself with his finest homespun."
+          }
+        },
+        {
+          "id": "f6b1d8a2",
+          "text": "Tenía en su casa una ama que pasaba de los cuarenta, y una sobrina que no llegaba a los veinte, y un mozo de campo y plaza, que así ensillaba el rocín como tomaba la podadera.",
+          "translations": {
+            "it": "Aveva in casa una governante che passava i quarant'anni, una nipote che non arrivava ai venti, e un garzone tuttofare, che tanto sellava il ronzino quanto prendeva la roncola.",
+            "en": "He had in his house a housekeeper past forty, a niece not yet twenty, and a man-of-all-work who saddled the horse as readily as he wielded the pruning knife."
+          }
+        },
+        {
+          "id": "a879b1a2",
+          "text": "Frisaba la edad de nuestro hidalgo con los cincuenta años.",
+          "translations": {
+            "it": "L'età del nostro hidalgo rasentava i cinquant'anni.",
+            "en": "Our gentleman's age bordered on fifty."
+          }
+        },
+        {
+          "id": "3e69b170",
+          "text": "Era de complexión recia, seco de carnes, enjuto de rostro, gran madrugador y amigo de la caza.",
+          "translations": {
+            "it": "Era di corporatura robusta, asciutto di carni, magro di viso, gran mattiniero e amante della caccia.",
+            "en": "He was of sturdy build, lean of flesh, gaunt of face, an early riser, and a lover of the hunt."
+          }
+        },
+        {
+          "id": "e9a2d944",
+          "text": "Quieren decir que tenía el sobrenombre de Quijada o Quesada, que en esto hay alguna diferencia en los autores que deste caso escriben.",
+          "translations": {
+            "it": "Dicono che avesse il cognome di Quijada o Quesada, poiché su questo c'è qualche discrepanza tra gli autori che scrivono di questo caso.",
+            "en": "Some say his surname was Quijada or Quesada, for on this point there is some disagreement among the authors who write about this matter."
+          }
+        },
+        {
+          "id": "6c695b13",
+          "text": "Aunque por conjeturas verosímiles se deja entender que se llamaba Quejana.",
+          "translations": {
+            "it": "Sebbene, per congetture verosimili, si lascia intendere che si chiamasse Quejana.",
+            "en": "Although, from plausible conjectures, one may gather that his name was Quejana."
+          }
+        },
+        {
+          "id": "0d7da5a8",
+          "text": "Pero esto importa poco a nuestro cuento: basta que en la narración dél no se salga un punto de la verdad.",
+          "translations": {
+            "it": "Ma questo importa poco al nostro racconto: basta che nella narrazione non ci si discosti di un punto dalla verità.",
+            "en": "But this matters little to our story: it is enough that in the telling of it we do not stray one bit from the truth."
+          }
+        },
+        {
+          "id": "917b3e0d",
+          "text": "Es, pues, de saber que este sobredicho hidalgo, los ratos que estaba ocioso, que eran los más del año, se daba a leer libros de caballerías con tanta afición y gusto, que olvidó casi de todo punto el ejercicio de la caza, y aun la administración de su hacienda.",
+          "translations": {
+            "it": "Si deve dunque sapere che questo suddetto hidalgo, nei momenti in cui era ozioso, che erano i più dell'anno, si dedicava a leggere libri di cavalleria con tanta passione e gusto, che dimenticò quasi del tutto l'esercizio della caccia, e perfino l'amministrazione della sua proprietà.",
+            "en": "It should be known, then, that this aforementioned gentleman, in his idle moments, which made up most of the year, devoted himself to reading books of chivalry with such passion and pleasure that he almost entirely forgot the pursuit of hunting, and even the management of his estate."
+          }
+        },
+        {
+          "id": "0f71ecd4",
+          "text": "Y llegó a tanto su curiosidad y desatino en esto, que vendió muchas hanegas de tierra de sembradura para comprar libros de caballerías en que leer.",
+          "translations": {
+            "it": "E giunsero a tal punto la sua curiosità e follia in questo, che vendette molti ettari di terra da semina per comprare libri di cavalleria da leggere.",
+            "en": "And so great did his obsession and folly in this become that he sold many acres of farmland to buy books of chivalry to read."
+          }
+        },
+        {
+          "id": "d0495de6",
+          "text": "Y así, llevó a su casa todos cuantos pudo haber dellos.",
+          "translations": {
+            "it": "E così, portò a casa sua tutti quelli che riuscì a procurarsi.",
+            "en": "And so he brought home as many of them as he could get his hands on."
+          }
+        },
+        {
+          "id": "71e2f4e6",
+          "text": "Y de todos, ningunos le parecían tan bien como los que compuso el famoso Feliciano de Silva.",
+          "translations": {
+            "it": "E fra tutti, nessuno gli sembrava così buono come quelli composti dal famoso Feliciano de Silva.",
+            "en": "And of all of them, none seemed as good to him as those composed by the famous Feliciano de Silva."
+          }
+        },
+        {
+          "id": "86934840",
+          "text": "Porque la claridad de su prosa y aquellas entricadas razones suyas le parecían de perlas.",
+          "translations": {
+            "it": "Perché la chiarezza della sua prosa e quei suoi intricati ragionamenti gli sembravano perle preziose.",
+            "en": "Because the clarity of his prose and those intricate reasonings of his seemed to him like pearls."
+          }
+        },
+        {
+          "id": "90fcb356",
+          "text": "En resolución, él se enfrascó tanto en su lectura, que se le pasaban las noches leyendo de claro en claro, y los días de turbio en turbio.",
+          "translations": {
+            "it": "Insomma, si immerse tanto nella lettura che passava le notti leggendo dall'imbrunire all'alba, e i giorni dall'alba all'imbrunire.",
+            "en": "In short, he buried himself so deeply in his reading that his nights were spent reading from dusk to dawn, and his days from dawn to dusk."
+          }
+        },
+        {
+          "id": "94c343bb",
+          "text": "Y así, del poco dormir y del mucho leer, se le secó el celebro de manera que vino a perder el juicio.",
+          "translations": {
+            "it": "E così, dal poco dormire e dal molto leggere, gli si prosciugò il cervello in modo tale che finì per perdere il senno.",
+            "en": "And so, from little sleep and much reading, his brain dried up to such a degree that he came to lose his mind."
+          }
+        },
+        {
+          "id": "d9562caf",
+          "text": "Llenósele la fantasía de todo aquello que leía en los libros, así de encantamientos como de pendencias, batallas, desafíos, heridas, requiebros, amores, tormentas y disparates imposibles.",
+          "translations": {
+            "it": "La fantasia gli si riempì di tutto ciò che leggeva nei libri, tanto di incantesimi quanto di contese, battaglie, sfide, ferite, corteggiamenti, amori, tempeste e stravaganze impossibili.",
+            "en": "His imagination filled up with everything he read in the books, with enchantments as well as quarrels, battles, challenges, wounds, courtships, loves, storms, and impossible absurdities."
+          }
+        },
+        {
+          "id": "f05a087e",
+          "text": "Y asentósele de tal modo en la imaginación que era verdad toda aquella máquina de aquellas soñadas invenciones que leía, que para él no había otra historia más cierta en el mundo.",
+          "translations": {
+            "it": "E gli si fissò talmente nell'immaginazione che tutta quella macchina di sognate invenzioni che leggeva fosse vera, che per lui non c'era altra storia più certa al mondo.",
+            "en": "And it settled so firmly in his imagination that all that machinery of dreamed-up inventions he read was true, that for him there was no more certain history in the world."
+          }
+        },
+        {
+          "id": "0fb1fe8b",
+          "text": "Decía él que el Cid Ruy Díaz había sido muy buen caballero, pero que no tenía que ver con el Caballero de la Ardiente Espada.",
+          "translations": {
+            "it": "Diceva che il Cid Ruy Díaz era stato un ottimo cavaliere, ma che non aveva nulla a che vedere con il Cavaliere della Spada Ardente.",
+            "en": "He used to say that the Cid Ruy Díaz had been a very fine knight, but that he could not compare to the Knight of the Burning Sword."
+          }
+        },
+        {
+          "id": "d7ab671a",
+          "text": "En efecto, rematado ya su juicio, vino a dar en el más extraño pensamiento que jamás dio loco en el mundo.",
+          "translations": {
+            "it": "In effetti, ormai perduto del tutto il senno, giunse al pensiero più strano che mai pazzo abbia avuto al mondo.",
+            "en": "In short, his wits now completely gone, he arrived at the strangest thought that any madman in the world ever had."
+          }
+        },
+        {
+          "id": "08c0f549",
+          "text": "Y fue que le pareció convenible y necesario, así para el aumento de su honra como para el servicio de su república, hacerse caballero andante.",
+          "translations": {
+            "it": "E fu che gli parve opportuno e necessario, tanto per l'accrescimento del suo onore quanto per il servizio della sua patria, farsi cavaliere errante.",
+            "en": "And it was that it seemed to him fitting and necessary, both to increase his honor and to serve his country, to become a knight-errant."
+          }
+        },
+        {
+          "id": "f7dc5c57",
+          "text": "E irse por todo el mundo con sus armas y caballo a buscar las aventuras y a ejercitarse en todo aquello que él había leído que los caballeros andantes se ejercitaban.",
+          "translations": {
+            "it": "E andarsene per il mondo con le sue armi e il suo cavallo a cercare avventure e a esercitarsi in tutto ciò che aveva letto che i cavalieri erranti facevano.",
+            "en": "And to ride throughout the world with his arms and horse, seeking adventures and practicing all that he had read that knights-errant used to do."
+          }
+        },
+        {
+          "id": "a44c6db2",
+          "text": "Deshaciendo todo género de agravio, y poniéndose en ocasiones y peligros donde, acabándolos, cobrase eterno nombre y fama.",
+          "translations": {
+            "it": "Rimediando a ogni sorta di torto, e mettendosi in situazioni e pericoli dove, portandoli a termine, acquisterebbe fama e nome eterno.",
+            "en": "Righting every kind of wrong, and placing himself in situations and dangers where, by overcoming them, he would win eternal fame and renown."
+          }
+        },
+        {
+          "id": "7d60af4c",
+          "text": "Imaginábase el pobre ya coronado por el valor de su brazo, por lo menos del imperio de Trapisonda.",
+          "translations": {
+            "it": "Il poverino si immaginava già incoronato dal valore del suo braccio, per lo meno dell'impero di Trapisonda.",
+            "en": "The poor fellow already imagined himself crowned by the valor of his arm, at the very least emperor of Trebizond."
+          }
+        },
+        {
+          "id": "47315c9d",
+          "text": "Y así, con estos tan agradables pensamientos, llevado del extraño gusto que en ellos sentía, se dio priesa a poner en efecto lo que deseaba.",
+          "translations": {
+            "it": "E così, con questi pensieri tanto piacevoli, trasportato dallo straordinario gusto che provava in essi, si affrettò a mettere in atto ciò che desiderava.",
+            "en": "And so, with these most agreeable thoughts, carried away by the extraordinary pleasure he found in them, he hastened to put into effect what he desired."
+          }
+        }
       ]
     },
     {
       "number": 2,
       "title": "Que trata de la primera salida que de su tierra hizo el ingenioso don Quijote",
       "sentences": [
-        { "text": "Y lo primero que hizo fue limpiar unas armas que habían sido de sus bisabuelos, que, tomadas de orín y llenas de moho, luengos siglos había que estaban puestas y olvidadas en un rincón." },
-        { "text": "Limpiólas y aderezólas lo mejor que pudo." },
-        { "text": "Pero vio que tenían una gran falta, y era que no tenían celada de encaje, sino morrión simple." },
-        { "text": "Mas a esto suplió su industria, porque de cartones hizo un modo de media celada, que, encajada con el morrión, hacían una apariencia de celada entera." },
-        { "text": "Es verdad que, para probar si era fuerte y podía estar al riesgo de una cuchillada, sacó su espada y le dio dos golpes, y con el primero y en un punto deshizo lo que había hecho en una semana." },
-        { "text": "Y no dejó de parecerle mal la facilidad con que la había hecho pedazos." },
-        { "text": "Y, por asegurarse deste peligro, la tornó a hacer de nuevo, poniéndole unas barras de hierro por de dentro, de tal manera que él quedó satisfecho de su fortaleza." },
-        { "text": "Y, sin querer hacer nueva experiencia della, la diputó y tuvo por celada finísima de encaje." },
-        { "text": "Fue luego a ver su rocín, y aunque tenía más cuartos que un real y más tachas que el caballo de Gonela, le pareció que ni el Bucéfalo de Alejandro ni Babieca el del Cid con él se igualaban." },
-        { "text": "Cuatro días se le pasaron en imaginar qué nombre le pondría." },
-        { "text": "Porque, según se decía él a sí mesmo, no era razón que caballo de caballero tan famoso, y tan bueno él por sí, estuviese sin nombre conocido." },
-        { "text": "Y así, procuraba acomodársele de manera que declarase quién había sido antes que fuese de caballero andante, y lo que era entonces." },
-        { "text": "Pues estaba muy puesto en razón que, mudando su señor estado, mudase él también el nombre." },
-        { "text": "Y le cobrase famoso y de estruendo, como convenía a la nueva orden y al nuevo ejercicio que ya profesaba." },
-        { "text": "Y así, después de muchos nombres que formó, borró y quitó, añadió, deshizo y tornó a hacer en su memoria e imaginación, al fin le vino a llamar Rocinante." },
-        { "text": "Nombre, a su parecer, alto, sonoro y significativo de lo que había sido cuando fue rocín, antes de lo que ahora era, que era antes y primero de todos los rocines del mundo." },
-        { "text": "Puesto nombre, y tan a su gusto, a su caballo, quiso ponérsele a sí mismo." },
-        { "text": "Y en este pensamiento duró otros ocho días, y al cabo se vino a llamar don Quijote." },
-        { "text": "De donde, como queda dicho, tomaron ocasión los autores desta tan verdadera historia que, sin duda, se debía de llamar Quijada, y no Quesada, como otros quisieron decir." },
-        { "text": "Pero acordándose que el valeroso Amadís no sólo se había contentado con llamarse Amadís a secas, sino que añadió el nombre de su reino y patria, por hacerla famosa, y se llamó Amadís de Gaula, así quiso, como buen caballero, añadir al suyo el nombre de la suya y llamarse don Quijote de la Mancha." },
-        { "text": "Con que, a su parecer, declaraba muy al vivo su linaje y patria, y la honraba con tomar el sobrenombre della." },
-        { "text": "Limpias, pues, sus armas, hecho del morrión celada, puesto nombre a su rocín y confirmándose a sí mismo, se dio a entender que no le faltaba otra cosa sino buscar una dama de quien enamorarse." },
-        { "text": "Porque el caballero andante sin amores era árbol sin hojas y sin fruto, y cuerpo sin alma." },
-        { "text": "Decíase él: «Si yo, por malos de mis pecados, o por mi buena suerte, me encuentro por ahí con algún gigante, como de ordinario les acontece a los caballeros andantes, y le derribo de un encuentro, o le parto por mitad del cuerpo, o, finalmente, le venzo y le rindo, ¿no será bien tener a quien enviarle presentado, y que entre y se hinque de rodillas ante mi dulce señora?»" },
-        { "text": "¡Y cuánto más cuando tenía ya hallada a quien dar nombre de su dama!" },
-        { "text": "Y fue, a lo que se cree, que en un lugar cerca del suyo había una moza labradora de muy buen parecer, de quien él un tiempo anduvo enamorado, aunque, según se entiende, ella jamás lo supo ni le dio cata dello." },
-        { "text": "Llamábase Aldonza Lorenzo, y a esta le pareció ser bien darle título de señora de sus pensamientos." },
-        { "text": "Y, buscándole nombre que no desdijese mucho del suyo, y que tirase y se encaminase al de princesa y gran señora, vino a llamarla Dulcinea del Toboso." },
-        { "text": "Nombre, a su parecer, músico y peregrino y significativo, como todos los demás que a él y a sus cosas había puesto." }
+        {
+          "id": "67b1a688",
+          "text": "Y lo primero que hizo fue limpiar unas armas que habían sido de sus bisabuelos, que, tomadas de orín y llenas de moho, luengos siglos había que estaban puestas y olvidadas en un rincón.",
+          "translations": {
+            "it": "E la prima cosa che fece fu pulire delle armi che erano appartenute ai suoi bisnonni, che, arrugginite e piene di muffa, da lunghi secoli giacevano riposte e dimenticate in un angolo.",
+            "en": "And the first thing he did was clean some armor that had belonged to his great-grandfathers, which, covered in rust and full of mold, had been sitting forgotten in a corner for ages."
+          }
+        },
+        {
+          "id": "4842aee7",
+          "text": "Limpiólas y aderezólas lo mejor que pudo.",
+          "translations": {
+            "it": "Le pulì e le aggiustò meglio che poté.",
+            "en": "He cleaned and repaired them as best he could."
+          }
+        },
+        {
+          "id": "19836229",
+          "text": "Pero vio que tenían una gran falta, y era que no tenían celada de encaje, sino morrión simple.",
+          "translations": {
+            "it": "Ma vide che avevano un gran difetto, e cioè che non avevano una celata con visiera, ma solo un semplice morione.",
+            "en": "But he saw that they had a great defect, which was that they had no visored helmet, only a simple morion."
+          }
+        },
+        {
+          "id": "c2890f38",
+          "text": "Mas a esto suplió su industria, porque de cartones hizo un modo de media celada, que, encajada con el morrión, hacían una apariencia de celada entera.",
+          "translations": {
+            "it": "Ma a questo supplì la sua ingegnosità, perché con dei cartoni fece una specie di mezza celata che, incastrata nel morione, dava l'apparenza di una celata intera.",
+            "en": "But his ingenuity made up for this, because out of cardboard he fashioned a sort of half-helmet that, fitted onto the morion, gave the appearance of a full helmet."
+          }
+        },
+        {
+          "id": "30017a6f",
+          "text": "Es verdad que, para probar si era fuerte y podía estar al riesgo de una cuchillada, sacó su espada y le dio dos golpes, y con el primero y en un punto deshizo lo que había hecho en una semana.",
+          "translations": {
+            "it": "È vero che, per provare se fosse resistente e potesse reggere il rischio di una sciabolata, sguainò la spada e le diede due colpi, e con il primo e in un istante disfece ciò che aveva fatto in una settimana.",
+            "en": "It is true that, to test whether it was strong and could withstand the blow of a sword, he drew his blade and struck it twice, and with the first blow he instantly destroyed what had taken him a week to make."
+          }
+        },
+        {
+          "id": "aaac3ed4",
+          "text": "Y no dejó de parecerle mal la facilidad con que la había hecho pedazos.",
+          "translations": {
+            "it": "E non poté fare a meno di dispiacersi per la facilità con cui l'aveva fatta a pezzi.",
+            "en": "And he could not help but be displeased by the ease with which he had smashed it to pieces."
+          }
+        },
+        {
+          "id": "ac67925f",
+          "text": "Y, por asegurarse deste peligro, la tornó a hacer de nuevo, poniéndole unas barras de hierro por de dentro, de tal manera que él quedó satisfecho de su fortaleza.",
+          "translations": {
+            "it": "E, per premunirsi contro questo pericolo, la rifece di nuovo, mettendoci dentro delle barre di ferro, in modo tale che rimase soddisfatto della sua solidità.",
+            "en": "And, to protect against this danger, he made it again from scratch, placing iron bars inside it, so that he was satisfied with its sturdiness."
+          }
+        },
+        {
+          "id": "a9283e48",
+          "text": "Y, sin querer hacer nueva experiencia della, la diputó y tuvo por celada finísima de encaje.",
+          "translations": {
+            "it": "E, senza voler farne ulteriore prova, la giudicò e la tenne per celata finissima con visiera.",
+            "en": "And, not wishing to test it again, he declared it and considered it a most fine visored helmet."
+          }
+        },
+        {
+          "id": "33b72c22",
+          "text": "Fue luego a ver su rocín, y aunque tenía más cuartos que un real y más tachas que el caballo de Gonela, le pareció que ni el Bucéfalo de Alejandro ni Babieca el del Cid con él se igualaban.",
+          "translations": {
+            "it": "Andò poi a vedere il suo ronzino, e benché avesse più magagne di una moneta falsa e più difetti del cavallo di Gonela, gli parve che né il Bucefalo di Alessandro né Babieca, quello del Cid, lo eguagliassero.",
+            "en": "He then went to see his nag, and although it had more blemishes than a counterfeit coin and more defects than Gonela's horse, it seemed to him that neither Alexander's Bucephalus nor the Cid's Babieca could equal it."
+          }
+        },
+        {
+          "id": "1ec08840",
+          "text": "Cuatro días se le pasaron en imaginar qué nombre le pondría.",
+          "translations": {
+            "it": "Quattro giorni passò a immaginare quale nome dargli.",
+            "en": "Four days he spent imagining what name to give it."
+          }
+        },
+        {
+          "id": "f9cf9eb1",
+          "text": "Porque, según se decía él a sí mesmo, no era razón que caballo de caballero tan famoso, y tan bueno él por sí, estuviese sin nombre conocido.",
+          "translations": {
+            "it": "Perché, come diceva a se stesso, non era giusto che il cavallo di un cavaliere così famoso, e così valente di per sé, restasse senza un nome conosciuto.",
+            "en": "Because, as he told himself, it was not right that the horse of so famous a knight, and one so worthy in itself, should be without a known name."
+          }
+        },
+        {
+          "id": "adab0b7c",
+          "text": "Y así, procuraba acomodársele de manera que declarase quién había sido antes que fuese de caballero andante, y lo que era entonces.",
+          "translations": {
+            "it": "E così cercava di trovarne uno che rivelasse ciò che era stato prima di appartenere a un cavaliere errante, e ciò che era allora.",
+            "en": "And so he tried to find one that would reveal what it had been before it belonged to a knight-errant, and what it was now."
+          }
+        },
+        {
+          "id": "a2fbae0f",
+          "text": "Pues estaba muy puesto en razón que, mudando su señor estado, mudase él también el nombre.",
+          "translations": {
+            "it": "Poiché era molto ragionevole che, cambiando il suo padrone condizione, cambiasse anch'esso il nome.",
+            "en": "For it was very reasonable that, his master having changed his station, the horse should also change its name."
+          }
+        },
+        {
+          "id": "b116c4b6",
+          "text": "Y le cobrase famoso y de estruendo, como convenía a la nueva orden y al nuevo ejercicio que ya profesaba.",
+          "translations": {
+            "it": "E ne acquistasse uno famoso e altisonante, come si conveniva al nuovo ordine e al nuovo mestiere che già professava.",
+            "en": "And that it should acquire a famous and resounding one, as befitted the new order and the new calling he now professed."
+          }
+        },
+        {
+          "id": "a4f390b2",
+          "text": "Y así, después de muchos nombres que formó, borró y quitó, añadió, deshizo y tornó a hacer en su memoria e imaginación, al fin le vino a llamar Rocinante.",
+          "translations": {
+            "it": "E così, dopo molti nomi che ideò, cancellò e tolse, aggiunse, disfece e tornò a fare nella sua memoria e immaginazione, alla fine lo venne a chiamare Rocinante.",
+            "en": "And so, after many names that he devised, crossed out and removed, added, undid, and remade in his memory and imagination, he finally came to call him Rocinante."
+          }
+        },
+        {
+          "id": "05371bbc",
+          "text": "Nombre, a su parecer, alto, sonoro y significativo de lo que había sido cuando fue rocín, antes de lo que ahora era, que era antes y primero de todos los rocines del mundo.",
+          "translations": {
+            "it": "Nome, a suo parere, alto, sonoro e significativo di ciò che era stato quando fu ronzino, prima di ciò che ora era, che era il primo e il più importante di tutti i ronzini del mondo.",
+            "en": "A name, in his opinion, lofty, sonorous, and meaningful of what it had been when it was a nag, before what it now was, which was the first and foremost of all the nags in the world."
+          }
+        },
+        {
+          "id": "39ef181c",
+          "text": "Puesto nombre, y tan a su gusto, a su caballo, quiso ponérsele a sí mismo.",
+          "translations": {
+            "it": "Dato un nome, e tanto di suo gradimento, al suo cavallo, volle darne uno anche a se stesso.",
+            "en": "Having given a name, and one so much to his liking, to his horse, he wished to give one to himself as well."
+          }
+        },
+        {
+          "id": "404160d7",
+          "text": "Y en este pensamiento duró otros ocho días, y al cabo se vino a llamar don Quijote.",
+          "translations": {
+            "it": "E in questo pensiero durò altri otto giorni, e alla fine si venne a chiamare don Quijote.",
+            "en": "And on this thought he spent another eight days, and in the end he came to call himself Don Quijote."
+          }
+        },
+        {
+          "id": "397f3383",
+          "text": "De donde, como queda dicho, tomaron ocasión los autores desta tan verdadera historia que, sin duda, se debía de llamar Quijada, y no Quesada, como otros quisieron decir.",
+          "translations": {
+            "it": "Da cui, come si è detto, presero spunto gli autori di questa tanto veridica storia per dire che, senza dubbio, doveva chiamarsi Quijada, e non Quesada, come altri vollero dire.",
+            "en": "From which, as has been said, the authors of this very true history took occasion to say that, without a doubt, his name must have been Quijada, and not Quesada, as others wished to claim."
+          }
+        },
+        {
+          "id": "69f1c221",
+          "text": "Pero acordándose que el valeroso Amadís no sólo se había contentado con llamarse Amadís a secas, sino que añadió el nombre de su reino y patria, por hacerla famosa, y se llamó Amadís de Gaula, así quiso, como buen caballero, añadir al suyo el nombre de la suya y llamarse don Quijote de la Mancha.",
+          "translations": {
+            "it": "Ma ricordandosi che il valoroso Amadís non si era accontentato di chiamarsi semplicemente Amadís, ma aveva aggiunto il nome del suo regno e della sua patria, per renderla famosa, e si era chiamato Amadís de Gaula, così volle, da buon cavaliere, aggiungere al proprio il nome della sua e chiamarsi don Quijote de la Mancha.",
+            "en": "But remembering that the valiant Amadis had not merely been content to call himself Amadis, but had added the name of his kingdom and homeland, to make it famous, and called himself Amadis of Gaul, so he wished, as a good knight, to add to his own the name of his homeland and call himself Don Quijote de la Mancha."
+          }
+        },
+        {
+          "id": "e3ce4aff",
+          "text": "Con que, a su parecer, declaraba muy al vivo su linaje y patria, y la honraba con tomar el sobrenombre della.",
+          "translations": {
+            "it": "Con che, a suo parere, dichiarava in modo molto vivido il suo lignaggio e la sua patria, e la onorava prendendone il soprannome.",
+            "en": "With which, in his opinion, he very vividly declared his lineage and homeland, and honored it by taking its name as his surname."
+          }
+        },
+        {
+          "id": "5da5eea7",
+          "text": "Limpias, pues, sus armas, hecho del morrión celada, puesto nombre a su rocín y confirmándose a sí mismo, se dio a entender que no le faltaba otra cosa sino buscar una dama de quien enamorarse.",
+          "translations": {
+            "it": "Pulite, dunque, le sue armi, fatto del morione una celata, dato nome al suo ronzino e confermato se stesso, si convinse che non gli mancava altro che cercare una dama di cui innamorarsi.",
+            "en": "His armor now cleaned, the morion made into a helmet, his nag named and himself confirmed, he realized that he lacked nothing except a lady to fall in love with."
+          }
+        },
+        {
+          "id": "b1012922",
+          "text": "Porque el caballero andante sin amores era árbol sin hojas y sin fruto, y cuerpo sin alma.",
+          "translations": {
+            "it": "Perché il cavaliere errante senza amori era albero senza foglie e senza frutti, e corpo senza anima.",
+            "en": "Because a knight-errant without a lady love was a tree without leaves or fruit, and a body without a soul."
+          }
+        },
+        {
+          "id": "54ed9098",
+          "text": "Decíase él: «Si yo, por malos de mis pecados, o por mi buena suerte, me encuentro por ahí con algún gigante, como de ordinario les acontece a los caballeros andantes, y le derribo de un encuentro, o le parto por mitad del cuerpo, o, finalmente, le venzo y le rindo, ¿no será bien tener a quien enviarle presentado, y que entre y se hinque de rodillas ante mi dulce señora?»",
+          "translations": {
+            "it": "Diceva tra sé: «Se io, per mia sventura o per mia buona sorte, mi imbatto da qualche parte in qualche gigante, come di solito accade ai cavalieri erranti, e lo abbatto con un colpo, o lo spacco a metà del corpo, o, infine, lo vinco e lo sottometto, non sarà bene avere qualcuno a cui mandarlo in dono, perché entri e si inginocchi davanti alla mia dolce signora?»",
+            "en": "He said to himself: \"If I, through my misfortune or my good luck, should come across some giant, as ordinarily happens to knights-errant, and I knock him down in one blow, or cleave him in half, or, in short, vanquish and subdue him, would it not be good to have someone to send him to as a gift, so that he may enter and kneel before my sweet lady?\""
+          }
+        },
+        {
+          "id": "26c618ed",
+          "text": "¡Y cuánto más cuando tenía ya hallada a quien dar nombre de su dama!",
+          "translations": {
+            "it": "E tanto più quando aveva già trovato a chi dare il nome di sua dama!",
+            "en": "And how much more so when he had already found someone to give the name of his lady!"
+          }
+        },
+        {
+          "id": "8da2d5ea",
+          "text": "Y fue, a lo que se cree, que en un lugar cerca del suyo había una moza labradora de muy buen parecer, de quien él un tiempo anduvo enamorado, aunque, según se entiende, ella jamás lo supo ni le dio cata dello.",
+          "translations": {
+            "it": "E accadde, a quanto si crede, che in un paese vicino al suo c'era una giovane contadina di bell'aspetto, di cui egli un tempo fu innamorato, sebbene, a quanto si sa, lei non lo seppe mai né gli prestò attenzione.",
+            "en": "And it happened, so it is believed, that in a village near his own there was a peasant girl of very fine appearance, with whom he had once been in love, although, as far as is known, she never knew it nor paid him any mind."
+          }
+        },
+        {
+          "id": "f3bec3a5",
+          "text": "Llamábase Aldonza Lorenzo, y a esta le pareció ser bien darle título de señora de sus pensamientos.",
+          "translations": {
+            "it": "Si chiamava Aldonza Lorenzo, e a questa gli parve bene dare il titolo di signora dei suoi pensieri.",
+            "en": "Her name was Aldonza Lorenzo, and he thought it fitting to give her the title of lady of his thoughts."
+          }
+        },
+        {
+          "id": "5b67b010",
+          "text": "Y, buscándole nombre que no desdijese mucho del suyo, y que tirase y se encaminase al de princesa y gran señora, vino a llamarla Dulcinea del Toboso.",
+          "translations": {
+            "it": "E, cercandole un nome che non stonasse troppo con il suo, e che tendesse e si avvicinasse a quello di principessa e gran signora, venne a chiamarla Dulcinea del Toboso.",
+            "en": "And, seeking a name for her that would not differ too much from her own, and that would lean toward and approach that of a princess and great lady, he came to call her Dulcinea del Toboso."
+          }
+        },
+        {
+          "id": "78914bde",
+          "text": "Nombre, a su parecer, músico y peregrino y significativo, como todos los demás que a él y a sus cosas había puesto.",
+          "translations": {
+            "it": "Nome, a suo parere, musicale e pellegrino e significativo, come tutti gli altri che a lui e alle sue cose aveva dato.",
+            "en": "A name, in his opinion, musical and rare and meaningful, like all the others he had given to himself and his possessions."
+          }
+        }
       ]
     },
     {
       "number": 3,
       "title": "Donde se cuenta la graciosa manera que tuvo don Quijote en armarse caballero",
       "sentences": [
-        { "text": "Hechas, pues, estas prevenciones, no quiso aguardar más tiempo a poner en efecto su pensamiento, apretándole a ello la falta que él pensaba que hacía en el mundo su tardanza." },
-        { "text": "Según eran los agravios que pensaba deshacer, tuertos que enderezar, sinrazones que emendar, y abusos que mejorar, y deudas que satisfacer." },
-        { "text": "Y así, sin dar parte a persona alguna de su intención, y sin que nadie le viese, una mañana, antes del día, que era uno de los calurosos del mes de julio, se armó de todas sus armas." },
-        { "text": "Subió sobre Rocinante, puesta su mal compuesta celada, embrazó su adarga, tomó su lanza, y por la puerta falsa de un corral salió al campo, con grandísimo contento y alborozo de ver con cuánta facilidad había dado principio a su buen deseo." },
-        { "text": "Mas apenas se vio en el campo, cuando le asaltó un pensamiento terrible, y tal, que por poco le hiciera dejar la comenzada empresa." },
-        { "text": "Y fue que le vino a la memoria que no era armado caballero." },
-        { "text": "Y que, conforme a ley de caballería, ni podía ni debía tomar armas con ningún caballero." },
-        { "text": "Y puesto que lo fuera, había de llevar armas blancas, como caballero novel, sin empresa en el escudo, hasta que por su esfuerzo la ganase." },
-        { "text": "Estos pensamientos le hicieron titubear en su propósito." },
-        { "text": "Mas, pudiendo más su locura que otra razón alguna, propuso de hacerse armar caballero del primero que topase, a imitación de otros muchos que así lo hicieron." },
-        { "text": "En lo de las armas blancas, pensaba limpiarlas de manera, en teniendo lugar, que lo fuesen más que un armiño." },
-        { "text": "Y con esto se quietó y prosiguió su camino, sin llevar otro que aquel que su caballo quería." },
-        { "text": "Creyendo que en aquello consistía la fuerza de las aventuras." },
-        { "text": "Yendo, pues, caminando nuestro flamante aventurero, iba hablando consigo mesmo y diciendo: «¿Quién duda sino que en los venideros tiempos, cuando salga a luz la verdadera historia de mis famosos hechos, que el sabio que los escribiere no ponga, cuando llegue a contar esta mi primera salida tan de mañana, desta manera?»" },
-        { "text": "«Apenas había el rubicundo Apolo tendido por la faz de la ancha y espaciosa tierra las doradas hebras de sus hermosos cabellos, y apenas los pequeños y pintados pajarillos con sus arpadas lenguas habían saludado con dulce y meliflua armonía la venida de la rosada aurora.»" },
-        { "text": "«Cuando el famoso caballero don Quijote de la Mancha, dejando las ociosas plumas, subió sobre su famoso caballo Rocinante, y comenzó a caminar por el antiguo y conocido campo de Montiel.»" },
-        { "text": "Y era la verdad que por él caminaba." },
-        { "text": "Y añadió diciendo: «Dichosa edad y siglo dichoso aquel adonde saldrán a luz las famosas hazañas mías, dignas de entallarse en bronces, esculpirse en mármoles y pintarse en tablas, para memoria en lo futuro.»" },
-        { "text": "«¡Oh tú, sabio encantador, quienquiera que seas, a quien ha de tocar el ser coronista desta peregrina historia, ruégote que no te olvides de mi buen Rocinante, compañero eterno mío en todos mis caminos y carreras!»" },
-        { "text": "Luego volvía diciendo, como si verdaderamente fuera enamorado: «¡Oh princesa Dulcinea, señora deste cautivo corazón! Mucho agravio me habedes fecho en despedirme y reprocharme con el riguroso afincamiento de mandarme no parecer ante la vuestra fermosura.»" },
-        { "text": "«Plégaos, señora, de membraros deste vuestro sujeto corazón, que tantas cuitas por vuestro amor padece.»" },
-        { "text": "Con estos iba ensartando otros disparates, todos al modo de los que sus libros le habían enseñado, imitando en cuanto podía su lenguaje." },
-        { "text": "Con esto, caminaba tan despacio, y el sol entraba tan apriesa y con tanto ardor, que fuera bastante a derretirle los sesos, si algunos tuviera." },
-        { "text": "Casi todo aquel día caminó sin acontecerle cosa que de contar fuese, de lo cual se desesperaba." },
-        { "text": "Porque quisiera topar luego luego con quien hacer experiencia del valor de su fuerte brazo." },
-        { "text": "Autores hay que dicen que la primera aventura que le avino fue la del Puerto Lápice." },
-        { "text": "Otros dicen que la de los molinos de viento." },
-        { "text": "Pero lo que yo he podido averiguar en este caso, y lo que he hallado escrito en los anales de la Mancha, es que él anduvo todo aquel día." },
-        { "text": "Y al anochecer, su rocín y él se hallaron cansados y muertos de hambre." },
-        { "text": "Y que, mirando a todas partes por ver si descubriría algún castillo o alguna majada de pastores donde recogerse, y adonde pudiese remediar su mucha hambre y necesidad, vio, no lejos del camino por donde iba, una venta." },
-        { "text": "Que fue como si viera una estrella que a los portales, si no a los alcázares, de su redención le encaminaba." },
-        { "text": "Diose priesa a caminar, y llegó a ella a tiempo que anochecía." },
-        { "text": "Estaban acaso a la puerta dos mujeres mozas, destas que llaman del partido, las cuales iban a Sevilla con unos arrieros que en la venta aquella noche acertaron a hacer jornada." },
-        { "text": "Y como a nuestro aventurero todo cuanto pensaba, veía o imaginaba le parecía ser hecho y pasar al modo de lo que había leído, luego que vio la venta se le representó que era un castillo con sus cuatro torres y chapiteles de luciente plata." },
-        { "text": "Sin faltarle su puente levadiza y honda cava, con todos aquellos adherentes que semejantes castillos se pintan." },
-        { "text": "Fuese llegando a la venta, que a él le parecía castillo, y a poco trecho della detuvo las riendas a Rocinante, esperando que algún enano se pusiese entre las almenas a dar señal con alguna trompeta de que llegaba caballero al castillo." },
-        { "text": "Pero como vio que se tardaban, y que Rocinante se daba priesa por llegar a la caballeriza, se llegó a la puerta de la venta." },
-        { "text": "Y vio a las dos destraídas mozas que allí estaban, que a él le parecieron dos hermosas doncellas o dos graciosas damas que delante de la puerta del castillo se estaban solazando." },
-        { "text": "En esto, sucedió acaso que un porquero que andaba recogiendo de unos rastrojos una manada de puercos, que sin perdón así se llaman, tocó un cuerno, a cuya señal ellos se recogen." },
-        { "text": "Y al instante se le representó a don Quijote lo que deseaba, que era que algún enano hacía señal de su venida." },
-        { "text": "Y así, con extraño contento, llegó a la venta y a las damas." }
+        {
+          "id": "31a1a111",
+          "text": "Hechas, pues, estas prevenciones, no quiso aguardar más tiempo a poner en efecto su pensamiento, apretándole a ello la falta que él pensaba que hacía en el mundo su tardanza.",
+          "translations": {
+            "it": "Fatte, dunque, queste prevenzioni, non volle aspettare oltre a mettere in atto il suo pensiero, spronandolo a ciò la mancanza che egli pensava arrecasse al mondo il suo ritardo.",
+            "en": "Having made these preparations, then, he did not wish to wait any longer to put his plan into action, urged on by the harm he believed his delay was causing in the world."
+          }
+        },
+        {
+          "id": "82757902",
+          "text": "Según eran los agravios que pensaba deshacer, tuertos que enderezar, sinrazones que emendar, y abusos que mejorar, y deudas que satisfacer.",
+          "translations": {
+            "it": "Tali erano i torti che pensava di riparare, le ingiustizie da raddrizzare, le iniquità da correggere, gli abusi da eliminare e i debiti da saldare.",
+            "en": "Such were the wrongs he intended to right, the injustices to straighten, the grievances to remedy, the abuses to correct, and the debts to settle."
+          }
+        },
+        {
+          "id": "11ec97df",
+          "text": "Y así, sin dar parte a persona alguna de su intención, y sin que nadie le viese, una mañana, antes del día, que era uno de los calurosos del mes de julio, se armó de todas sus armas.",
+          "translations": {
+            "it": "E così, senza comunicare a nessuno la sua intenzione, e senza che alcuno lo vedesse, un mattino, prima dell'alba, che era uno dei più caldi del mese di luglio, si armò di tutte le sue armi.",
+            "en": "And so, without telling anyone of his intention, and without anyone seeing him, one morning, before daybreak, which was one of the hottest days of the month of July, he armed himself with all his weapons."
+          }
+        },
+        {
+          "id": "c122381b",
+          "text": "Subió sobre Rocinante, puesta su mal compuesta celada, embrazó su adarga, tomó su lanza, y por la puerta falsa de un corral salió al campo, con grandísimo contento y alborozo de ver con cuánta facilidad había dado principio a su buen deseo.",
+          "translations": {
+            "it": "Montò su Rocinante, indossò la sua malconcia celata, imbracciò la sua adarga, prese la sua lancia, e dalla porta secondaria di un cortile uscì in campo aperto, con grandissimo contento e gioia di vedere con quanta facilità aveva dato inizio al suo nobile proposito.",
+            "en": "He mounted Rocinante, put on his ill-constructed helmet, took up his shield, grasped his lance, and through the back gate of a yard he rode out into the open country, with the greatest contentment and joy at seeing how easily he had given a beginning to his noble purpose."
+          }
+        },
+        {
+          "id": "c3d95583",
+          "text": "Mas apenas se vio en el campo, cuando le asaltó un pensamiento terrible, y tal, que por poco le hiciera dejar la comenzada empresa.",
+          "translations": {
+            "it": "Ma appena si trovò in aperta campagna, lo assalì un pensiero terribile, tale che per poco non gli fece abbandonare l'impresa appena iniziata.",
+            "en": "But no sooner did he find himself in the open country than a terrible thought struck him, one so dire that it nearly made him abandon his newly begun enterprise."
+          }
+        },
+        {
+          "id": "c9c6d929",
+          "text": "Y fue que le vino a la memoria que no era armado caballero.",
+          "translations": {
+            "it": "E fu che gli venne in mente di non essere stato armato cavaliere.",
+            "en": "And it was that he remembered he had not been dubbed a knight."
+          }
+        },
+        {
+          "id": "e5d95afa",
+          "text": "Y que, conforme a ley de caballería, ni podía ni debía tomar armas con ningún caballero.",
+          "translations": {
+            "it": "E che, secondo la legge della cavalleria, non poteva né doveva prendere le armi contro alcun cavaliere.",
+            "en": "And that, according to the law of chivalry, he neither could nor should take up arms against any knight."
+          }
+        },
+        {
+          "id": "33723f08",
+          "text": "Y puesto que lo fuera, había de llevar armas blancas, como caballero novel, sin empresa en el escudo, hasta que por su esfuerzo la ganase.",
+          "translations": {
+            "it": "E quand'anche lo fosse stato, avrebbe dovuto portare armi bianche, come cavaliere novizio, senza impresa sullo scudo, finché per il suo valore non ne guadagnasse una.",
+            "en": "And even if he had been one, he would have had to bear white arms, as a novice knight, without a device on his shield, until by his valor he earned one."
+          }
+        },
+        {
+          "id": "04b1e797",
+          "text": "Estos pensamientos le hicieron titubear en su propósito.",
+          "translations": {
+            "it": "Questi pensieri lo fecero tentennare nel suo proposito.",
+            "en": "These thoughts made him waver in his purpose."
+          }
+        },
+        {
+          "id": "d6ff3aab",
+          "text": "Mas, pudiendo más su locura que otra razón alguna, propuso de hacerse armar caballero del primero que topase, a imitación de otros muchos que así lo hicieron.",
+          "translations": {
+            "it": "Ma, potendo più la sua follia che qualsiasi altra ragione, si propose di farsi armare cavaliere dal primo che avesse incontrato, a imitazione di molti altri che così avevano fatto.",
+            "en": "But, his madness being stronger than any other consideration, he resolved to have himself dubbed a knight by the first person he should meet, in imitation of many others who had done the same."
+          }
+        },
+        {
+          "id": "a9ed6127",
+          "text": "En lo de las armas blancas, pensaba limpiarlas de manera, en teniendo lugar, que lo fuesen más que un armiño.",
+          "translations": {
+            "it": "Quanto alle armi bianche, pensava di pulirle in modo tale, appena ne avesse avuto occasione, che fossero più candide di un ermellino.",
+            "en": "As for the white arms, he intended to clean them so well, when he had the chance, that they would be whiter than ermine."
+          }
+        },
+        {
+          "id": "6c5f860f",
+          "text": "Y con esto se quietó y prosiguió su camino, sin llevar otro que aquel que su caballo quería.",
+          "translations": {
+            "it": "E con ciò si acquietò e proseguì il suo cammino, senza seguire altra via che quella che il suo cavallo voleva.",
+            "en": "And with this he calmed down and continued on his way, following no other road than the one his horse chose."
+          }
+        },
+        {
+          "id": "05876373",
+          "text": "Creyendo que en aquello consistía la fuerza de las aventuras.",
+          "translations": {
+            "it": "Credendo che in ciò consistesse la forza delle avventure.",
+            "en": "Believing that therein lay the essence of adventures."
+          }
+        },
+        {
+          "id": "4943327e",
+          "text": "Yendo, pues, caminando nuestro flamante aventurero, iba hablando consigo mesmo y diciendo: «¿Quién duda sino que en los venideros tiempos, cuando salga a luz la verdadera historia de mis famosos hechos, que el sabio que los escribiere no ponga, cuando llegue a contar esta mi primera salida tan de mañana, desta manera?»",
+          "translations": {
+            "it": "Andando, dunque, in cammino il nostro nuovo avventuriero, parlava tra sé e sé dicendo: «Chi dubita che nei tempi a venire, quando vedrà la luce la vera storia delle mie famose imprese, il saggio che le scriverà non metta, arrivando a narrare questa mia prima uscita di buon mattino, in questa maniera?»",
+            "en": "As our brand-new adventurer went along, then, he was talking to himself and saying: \"Who can doubt that in times to come, when the true history of my famous deeds comes to light, the sage who writes them will put, when he comes to tell of this my first sally so early in the morning, in this fashion?\""
+          }
+        },
+        {
+          "id": "fef16ee3",
+          "text": "«Apenas había el rubicundo Apolo tendido por la faz de la ancha y espaciosa tierra las doradas hebras de sus hermosos cabellos, y apenas los pequeños y pintados pajarillos con sus arpadas lenguas habían saludado con dulce y meliflua armonía la venida de la rosada aurora.»",
+          "translations": {
+            "it": "«Appena il rubicondo Apollo aveva disteso sulla faccia dell'ampia e spaziosa terra le dorate ciocche dei suoi bei capelli, e appena i piccoli e variopinti uccellini con le loro canore lingue avevano salutato con dolce e melliflua armonia la venuta della rosata aurora.»",
+            "en": "\"Scarce had the ruddy Apollo spread over the face of the broad and spacious earth the golden threads of his beautiful hair, and scarce had the little painted birds with their harmonious tongues greeted with sweet and mellifluous melody the arrival of the rosy dawn.\""
+          }
+        },
+        {
+          "id": "7dee4306",
+          "text": "«Cuando el famoso caballero don Quijote de la Mancha, dejando las ociosas plumas, subió sobre su famoso caballo Rocinante, y comenzó a caminar por el antiguo y conocido campo de Montiel.»",
+          "translations": {
+            "it": "«Quando il famoso cavaliere don Quijote de la Mancha, lasciando le oziose piume, montò sul suo famoso cavallo Rocinante, e cominciò a cavalcare per l'antico e conosciuto campo di Montiel.»",
+            "en": "\"When the famous knight Don Quijote de la Mancha, leaving his idle bed, mounted his famous steed Rocinante, and began to ride across the ancient and well-known plain of Montiel.\""
+          }
+        },
+        {
+          "id": "296743a2",
+          "text": "Y era la verdad que por él caminaba.",
+          "translations": {
+            "it": "Ed era vero che attraverso di esso cavalcava.",
+            "en": "And it was true that he was indeed riding across it."
+          }
+        },
+        {
+          "id": "7f71251b",
+          "text": "Y añadió diciendo: «Dichosa edad y siglo dichoso aquel adonde saldrán a luz las famosas hazañas mías, dignas de entallarse en bronces, esculpirse en mármoles y pintarse en tablas, para memoria en lo futuro.»",
+          "translations": {
+            "it": "E aggiunse dicendo: «Felice età e secolo felice quello in cui verranno alla luce le mie famose imprese, degne di essere incise nel bronzo, scolpite nel marmo e dipinte su tavole, a memoria nel futuro.»",
+            "en": "And he added, saying: \"Fortunate age and fortunate era in which my famous deeds shall come to light, worthy of being engraved in bronze, sculpted in marble, and painted on panels, as a record for posterity.\""
+          }
+        },
+        {
+          "id": "6c2ad030",
+          "text": "«¡Oh tú, sabio encantador, quienquiera que seas, a quien ha de tocar el ser coronista desta peregrina historia, ruégote que no te olvides de mi buen Rocinante, compañero eterno mío en todos mis caminos y carreras!»",
+          "translations": {
+            "it": "«Oh tu, saggio incantatore, chiunque tu sia, a cui toccherà essere il cronista di questa peregrina storia, ti prego di non dimenticarti del mio buon Rocinante, compagno eterno mio in tutti i miei cammini e le mie imprese!»",
+            "en": "\"Oh you, wise enchanter, whoever you may be, to whom it shall fall to be the chronicler of this extraordinary history, I beg you not to forget my good Rocinante, my eternal companion in all my travels and adventures!\""
+          }
+        },
+        {
+          "id": "f767493a",
+          "text": "Luego volvía diciendo, como si verdaderamente fuera enamorado: «¡Oh princesa Dulcinea, señora deste cautivo corazón! Mucho agravio me habedes fecho en despedirme y reprocharme con el riguroso afincamiento de mandarme no parecer ante la vuestra fermosura.»",
+          "translations": {
+            "it": "Poi tornava a dire, come se fosse veramente innamorato: «Oh principessa Dulcinea, signora di questo cuore prigioniero! Gran torto mi avete fatto nel congedarmi e rimproverarmi con la rigorosa imposizione di non comparire dinanzi alla vostra bellezza.»",
+            "en": "Then he would say again, as if he were truly in love: \"Oh Princess Dulcinea, lady of this captive heart! Great wrong you have done me in dismissing me and reproaching me with the stern command not to appear before your beauty.\""
+          }
+        },
+        {
+          "id": "f324af46",
+          "text": "«Plégaos, señora, de membraros deste vuestro sujeto corazón, que tantas cuitas por vuestro amor padece.»",
+          "translations": {
+            "it": "«Vi piaccia, signora, di ricordarvi di questo vostro devoto cuore, che tante pene per amor vostro patisce.»",
+            "en": "\"May it please you, my lady, to remember this your devoted heart, which suffers so many sorrows for love of you.\""
+          }
+        },
+        {
+          "id": "b1abb388",
+          "text": "Con estos iba ensartando otros disparates, todos al modo de los que sus libros le habían enseñado, imitando en cuanto podía su lenguaje.",
+          "translations": {
+            "it": "Con questi andava infilando altri spropositi, tutti al modo di quelli che i suoi libri gli avevano insegnato, imitando per quanto poteva il loro linguaggio.",
+            "en": "With these he went on stringing together other absurdities, all in the manner of those his books had taught him, imitating their language as best he could."
+          }
+        },
+        {
+          "id": "3dfd2e53",
+          "text": "Con esto, caminaba tan despacio, y el sol entraba tan apriesa y con tanto ardor, que fuera bastante a derretirle los sesos, si algunos tuviera.",
+          "translations": {
+            "it": "Con ciò, cavalcava così lentamente, e il sole avanzava così in fretta e con tanto ardore, che sarebbe bastato a sciogliergli il cervello, se ne avesse avuto.",
+            "en": "With this, he rode so slowly, and the sun beat down so fiercely and with such intensity, that it would have been enough to melt his brains, if he had had any."
+          }
+        },
+        {
+          "id": "41d77aa5",
+          "text": "Casi todo aquel día caminó sin acontecerle cosa que de contar fuese, de lo cual se desesperaba.",
+          "translations": {
+            "it": "Quasi tutto quel giorno cavalcò senza che gli accadesse cosa degna di essere raccontata, e di ciò si disperava.",
+            "en": "He rode almost all that day without anything happening to him that was worth telling, which made him despair."
+          }
+        },
+        {
+          "id": "8aceac84",
+          "text": "Porque quisiera topar luego luego con quien hacer experiencia del valor de su fuerte brazo.",
+          "translations": {
+            "it": "Perché avrebbe voluto imbattersi subito subito in qualcuno con cui mettere alla prova il valore del suo forte braccio.",
+            "en": "For he would have liked to meet someone right away with whom to test the strength of his mighty arm."
+          }
+        },
+        {
+          "id": "6836356f",
+          "text": "Autores hay que dicen que la primera aventura que le avino fue la del Puerto Lápice.",
+          "translations": {
+            "it": "Vi sono autori che dicono che la prima avventura che gli capitò fu quella del Puerto Lápice.",
+            "en": "There are authors who say that the first adventure that befell him was that of Puerto Lápice."
+          }
+        },
+        {
+          "id": "855e00c7",
+          "text": "Otros dicen que la de los molinos de viento.",
+          "translations": {
+            "it": "Altri dicono che fu quella dei mulini a vento.",
+            "en": "Others say it was that of the windmills."
+          }
+        },
+        {
+          "id": "db8a8661",
+          "text": "Pero lo que yo he podido averiguar en este caso, y lo que he hallado escrito en los anales de la Mancha, es que él anduvo todo aquel día.",
+          "translations": {
+            "it": "Ma ciò che io ho potuto appurare in questo caso, e ciò che ho trovato scritto negli annali della Mancha, è che egli camminò tutto quel giorno.",
+            "en": "But what I have been able to ascertain in this matter, and what I have found written in the annals of La Mancha, is that he traveled all that day."
+          }
+        },
+        {
+          "id": "d62eae21",
+          "text": "Y al anochecer, su rocín y él se hallaron cansados y muertos de hambre.",
+          "translations": {
+            "it": "E al calar della sera, il suo ronzino e lui si trovarono stanchi e morti di fame.",
+            "en": "And at nightfall, his nag and he found themselves tired and dying of hunger."
+          }
+        },
+        {
+          "id": "7d4a045b",
+          "text": "Y que, mirando a todas partes por ver si descubriría algún castillo o alguna majada de pastores donde recogerse, y adonde pudiese remediar su mucha hambre y necesidad, vio, no lejos del camino por donde iba, una venta.",
+          "translations": {
+            "it": "E che, guardando da ogni parte per vedere se scoprisse qualche castello o qualche capanna di pastori dove rifugiarsi, e dove potesse rimediare alla sua grande fame e necessità, vide, non lontano dal cammino che percorreva, una locanda.",
+            "en": "And that, looking in all directions to see if he could discover some castle or some shepherd's hut where he might take shelter, and where he could remedy his great hunger and need, he saw, not far from the road he was traveling, an inn."
+          }
+        },
+        {
+          "id": "98c4a896",
+          "text": "Que fue como si viera una estrella que a los portales, si no a los alcázares, de su redención le encaminaba.",
+          "translations": {
+            "it": "Che fu come se vedesse una stella che ai portali, se non agli alcázar, della sua redenzione lo guidava.",
+            "en": "Which was as if he had seen a star guiding him to the gates, if not the palaces, of his redemption."
+          }
+        },
+        {
+          "id": "365dd13e",
+          "text": "Diose priesa a caminar, y llegó a ella a tiempo que anochecía.",
+          "translations": {
+            "it": "Si affrettò a cavalcare, e vi giunse proprio quando annottava.",
+            "en": "He hurried on, and reached it just as night was falling."
+          }
+        },
+        {
+          "id": "a24950f8",
+          "text": "Estaban acaso a la puerta dos mujeres mozas, destas que llaman del partido, las cuales iban a Sevilla con unos arrieros que en la venta aquella noche acertaron a hacer jornada.",
+          "translations": {
+            "it": "Stavano per caso alla porta due giovani donne, di quelle che chiamano di malaffare, le quali andavano a Siviglia con certi mulattieri che alla locanda quella notte avevano deciso di far tappa.",
+            "en": "There happened to be standing at the door two young women, of the kind they call ladies of easy virtue, who were on their way to Seville with some muleteers who had chanced to stop for the night at that inn."
+          }
+        },
+        {
+          "id": "29968b33",
+          "text": "Y como a nuestro aventurero todo cuanto pensaba, veía o imaginaba le parecía ser hecho y pasar al modo de lo que había leído, luego que vio la venta se le representó que era un castillo con sus cuatro torres y chapiteles de luciente plata.",
+          "translations": {
+            "it": "E siccome al nostro avventuriero tutto quanto pensava, vedeva o immaginava gli pareva essere fatto e accadere al modo di ciò che aveva letto, non appena vide la locanda se la figurò come un castello con le sue quattro torri e pinnacoli di lucente argento.",
+            "en": "And since to our adventurer everything he thought, saw, or imagined seemed to be fashioned and to happen in the manner of what he had read, as soon as he saw the inn he fancied it to be a castle with its four towers and pinnacles of gleaming silver."
+          }
+        },
+        {
+          "id": "a01f8b65",
+          "text": "Sin faltarle su puente levadiza y honda cava, con todos aquellos adherentes que semejantes castillos se pintan.",
+          "translations": {
+            "it": "Senza mancargli il suo ponte levatoio e il profondo fossato, con tutti quegli accessori con cui castelli simili vengono dipinti.",
+            "en": "Complete with its drawbridge and deep moat, and all those features with which such castles are depicted."
+          }
+        },
+        {
+          "id": "3fb10499",
+          "text": "Fuese llegando a la venta, que a él le parecía castillo, y a poco trecho della detuvo las riendas a Rocinante, esperando que algún enano se pusiese entre las almenas a dar señal con alguna trompeta de que llegaba caballero al castillo.",
+          "translations": {
+            "it": "Si andò avvicinando alla locanda, che a lui pareva un castello, e a poca distanza da essa trattenne le redini di Rocinante, aspettando che qualche nano si affacciasse tra le merlature per dare il segnale con qualche tromba che arrivava un cavaliere al castello.",
+            "en": "He rode up toward the inn, which to him seemed a castle, and at a short distance from it he reined in Rocinante, expecting some dwarf to appear on the battlements to signal with a trumpet that a knight was approaching the castle."
+          }
+        },
+        {
+          "id": "3d9faa60",
+          "text": "Pero como vio que se tardaban, y que Rocinante se daba priesa por llegar a la caballeriza, se llegó a la puerta de la venta.",
+          "translations": {
+            "it": "Ma vedendo che tardavano, e che Rocinante aveva fretta di raggiungere la stalla, si avvicinò alla porta della locanda.",
+            "en": "But seeing that they were taking their time, and that Rocinante was eager to reach the stable, he rode up to the door of the inn."
+          }
+        },
+        {
+          "id": "b4796c51",
+          "text": "Y vio a las dos destraídas mozas que allí estaban, que a él le parecieron dos hermosas doncellas o dos graciosas damas que delante de la puerta del castillo se estaban solazando.",
+          "translations": {
+            "it": "E vide le due sgualdrine che lì stavano, che a lui parvero due belle donzelle o due graziose dame che dinanzi alla porta del castello si stavano sollazzando.",
+            "en": "And he saw the two loose women who were standing there, who to him seemed two beautiful maidens or two gracious ladies taking their leisure at the castle gate."
+          }
+        },
+        {
+          "id": "a13a7e77",
+          "text": "En esto, sucedió acaso que un porquero que andaba recogiendo de unos rastrojos una manada de puercos, que sin perdón así se llaman, tocó un cuerno, a cuya señal ellos se recogen.",
+          "translations": {
+            "it": "In quel momento, accadde per caso che un porcaro che andava radunando da certe stoppie un branco di porci, che senza offesa così si chiamano, suonò un corno, al cui segnale essi si raccolgono.",
+            "en": "Just then, it happened that a swineherd who was gathering from some stubble fields a drove of hogs — for that, begging no one's pardon, is what they are called — blew his horn, at whose signal they come together."
+          }
+        },
+        {
+          "id": "a8562407",
+          "text": "Y al instante se le representó a don Quijote lo que deseaba, que era que algún enano hacía señal de su venida.",
+          "translations": {
+            "it": "E all'istante don Quijote si figurò ciò che desiderava, ossia che qualche nano stesse dando il segnale del suo arrivo.",
+            "en": "And instantly Don Quijote imagined what he wished, which was that some dwarf was announcing his arrival."
+          }
+        },
+        {
+          "id": "99db6f45",
+          "text": "Y así, con extraño contento, llegó a la venta y a las damas.",
+          "translations": {
+            "it": "E così, con straordinario contento, giunse alla locanda e alle dame.",
+            "en": "And so, with extraordinary delight, he arrived at the inn and before the ladies."
+          }
+        }
       ]
     }
   ]

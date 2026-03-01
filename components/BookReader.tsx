@@ -93,6 +93,17 @@ export default function BookReader({
 
   // Fetch translations when chapter or target language changes
   useEffect(() => {
+    // Check for pre-computed translations first
+    const precomputed = chapter.sentences.map(
+      (s) => s.translations?.[targetLang]
+    );
+    if (precomputed.every((t) => !!t)) {
+      setTranslations(precomputed as string[]);
+      setTranslationsLoading(false);
+      return;
+    }
+
+    // Fall back to API fetch for non-precomputed languages
     let cancelled = false;
     setTranslationsLoading(true);
 
@@ -121,7 +132,7 @@ export default function BookReader({
     return () => {
       cancelled = true;
     };
-  }, [sentences, language, targetLang, bookSlug, chapter.number]);
+  }, [chapter.sentences, language, targetLang, bookSlug, chapter.number]);
 
   // Jump to saved position on mount
   useEffect(() => {
