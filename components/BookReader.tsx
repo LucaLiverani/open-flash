@@ -5,6 +5,8 @@ import { useBookPlayer, type PlaybackSpeed } from "@/lib/useBookPlayer";
 import { useLongPressTooltip } from "@/lib/useLongPressTooltip";
 import WordTooltip from "./WordTooltip";
 import WordSpans from "./WordSpans";
+import AddToVocabDeckModal from "./AddToVocabDeckModal";
+import AddToVerbDeckModal from "./AddToVerbDeckModal";
 import type { BookChapter } from "@/lib/books";
 
 interface BookReaderProps {
@@ -44,6 +46,18 @@ export default function BookReader({
 
   const sentenceRefs = useRef<(HTMLDivElement | null)[]>([]);
   const progressSaveTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
+
+  // Modal state
+  const [addWordModal, setAddWordModal] = useState<{
+    word: string;
+    translation: string;
+    sentence: string;
+  } | null>(null);
+  const [addVerbModal, setAddVerbModal] = useState<{ word: string } | null>(null);
+  const [toast, setToast] = useState<string | null>(null);
+
+  // Tracks whether audio should resume when a modal is closed
+  const wasPlayingForModal = useRef(false);
 
   // Save progress (debounced)
   const saveProgress = useCallback(
@@ -147,10 +161,48 @@ export default function BookReader({
   const {
     tooltip,
     dismissTooltip,
+    resumeAfterTooltip,
+    wasPlayingBeforeTooltip,
     containerTouchHandlers,
     handleWordClick,
     handleSentenceClick,
   } = useLongPressTooltip({ isPlaying, pause, play, jumpTo });
+
+  // Normal tooltip dismiss — resumes audio if long-press had paused it
+  const handleDismissTooltip = useCallback(() => {
+    dismissTooltip();
+    resumeAfterTooltip();
+  }, [dismissTooltip, resumeAfterTooltip]);
+
+  function openWordModal(word: string, trans: string) {
+    wasPlayingForModal.current = wasPlayingBeforeTooltip.current || isPlaying;
+    dismissTooltip();
+    if (isPlaying) pause();
+    const si = tooltip?.sentenceIndex ?? (activeSentenceIndex >= 0 ? activeSentenceIndex : undefined);
+    setAddWordModal({
+      word,
+      translation: trans,
+      sentence: si !== undefined ? sentences[si] : "",
+    });
+  }
+
+  function openVerbModal(word: string) {
+    wasPlayingForModal.current = wasPlayingBeforeTooltip.current || isPlaying;
+    dismissTooltip();
+    if (isPlaying) pause();
+    setAddVerbModal({ word });
+  }
+
+  function handleModalClose(successMessage?: string) {
+    setAddWordModal(null);
+    setAddVerbModal(null);
+    if (wasPlayingForModal.current) play();
+    wasPlayingForModal.current = false;
+    if (successMessage) {
+      setToast(successMessage);
+      setTimeout(() => setToast(null), 2500);
+    }
+  }
 
   const prevChapter = chapter.number > 1 ? chapter.number - 1 : null;
   const nextChapter =
@@ -254,6 +306,7 @@ export default function BookReader({
             ref={(el) => {
               sentenceRefs.current[sIndex] = el;
             }}
+            data-sentence-index={sIndex}
             onClick={() => handleSentenceClick(sIndex)}
             className={`rounded-lg border p-3 cursor-pointer transition-colors select-none ${
               sIndex === activeSentenceIndex
@@ -309,8 +362,38 @@ export default function BookReader({
           rect={tooltip.rect}
           sourceLang={language}
           targetLang={targetLang}
-          onDismiss={dismissTooltip}
+          onDismiss={handleDismissTooltip}
+          onAddAsWord={openWordModal}
+          onAddAsVerb={openVerbModal}
         />
+      )}
+
+      {/* Add word modal */}
+      {addWordModal && (
+        <AddToVocabDeckModal
+          word={addWordModal.word}
+          translation={addWordModal.translation}
+          exampleSentence={addWordModal.sentence}
+          sourceLang={language}
+          targetLang={targetLang}
+          onClose={handleModalClose}
+        />
+      )}
+
+      {/* Add verb modal */}
+      {addVerbModal && (
+        <AddToVerbDeckModal
+          word={addVerbModal.word}
+          language={language}
+          onClose={handleModalClose}
+        />
+      )}
+
+      {/* Toast notification */}
+      {toast && (
+        <div className="fixed bottom-6 left-1/2 -translate-x-1/2 bg-surface border border-border rounded-lg px-4 py-2 text-sm text-text shadow-lg z-50 pointer-events-none">
+          {toast}
+        </div>
       )}
     </div>
   );

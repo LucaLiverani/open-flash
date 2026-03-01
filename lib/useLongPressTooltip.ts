@@ -3,6 +3,7 @@ import { useState, useCallback, useRef } from "react";
 interface TooltipState {
   word: string;
   rect: DOMRect;
+  sentenceIndex?: number;
 }
 
 interface UseLongPressTooltipOptions {
@@ -21,6 +22,8 @@ export function useLongPressTooltip({
   const [tooltip, setTooltip] = useState<TooltipState | null>(null);
   const longPressTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
   const longPressTriggered = useRef(false);
+  // Tracks whether audio was playing when a long-press opened the tooltip
+  const wasPlayingBeforeTooltip = useRef(false);
 
   const handleTouchStart = useCallback(
     (e: React.TouchEvent) => {
@@ -30,11 +33,14 @@ export function useLongPressTooltip({
       );
       longPressTimer.current = setTimeout(() => {
         longPressTriggered.current = true;
+        wasPlayingBeforeTooltip.current = isPlaying;
         if (isPlaying) pause();
         if (target) {
           const word = target.dataset.word!;
           const rect = target.getBoundingClientRect();
-          setTooltip({ word, rect });
+          const sentenceEl = target.closest<HTMLElement>("[data-sentence-index]");
+          const sentenceIndex = sentenceEl ? parseInt(sentenceEl.dataset.sentenceIndex!, 10) : undefined;
+          setTooltip({ word, rect, sentenceIndex });
         }
       }, 500);
     },
@@ -46,11 +52,9 @@ export function useLongPressTooltip({
       clearTimeout(longPressTimer.current);
       longPressTimer.current = null;
     }
-    if (longPressTriggered.current) {
-      play();
-      setTooltip(null);
-    }
-  }, [play]);
+    // Tooltip stays open after finger lift so the user can tap the action buttons.
+    // Audio resumes when the tooltip is explicitly dismissed via dismissTooltip.
+  }, []);
 
   const handleTouchMove = useCallback(() => {
     if (longPressTimer.current) {
@@ -65,8 +69,11 @@ export function useLongPressTooltip({
       if (longPressTriggered.current) return;
       const cleaned = word.replace(/[.,;:!?"""''()[\]{}¡¿«»]/g, "").trim();
       if (!cleaned) return;
+      wasPlayingBeforeTooltip.current = false; // desktop click doesn't pause audio
       const rect = (e.target as HTMLElement).getBoundingClientRect();
-      setTooltip({ word: cleaned, rect });
+      const sentenceEl = (e.target as HTMLElement).closest<HTMLElement>("[data-sentence-index]");
+      const sentenceIndex = sentenceEl ? parseInt(sentenceEl.dataset.sentenceIndex!, 10) : undefined;
+      setTooltip({ word: cleaned, rect, sentenceIndex });
     },
     []
   );
@@ -79,11 +86,25 @@ export function useLongPressTooltip({
     [jumpTo]
   );
 
-  const dismissTooltip = useCallback(() => setTooltip(null), []);
+  const dismissTooltip = useCallback(() => {
+    setTooltip(null);
+    longPressTriggered.current = false;
+  }, []);
+
+  // Resume audio if it was paused by the long-press that opened the tooltip.
+  // Call this when the tooltip is dismissed without opening a modal (e.g. × button, tap outside).
+  const resumeAfterTooltip = useCallback(() => {
+    if (wasPlayingBeforeTooltip.current) {
+      play();
+      wasPlayingBeforeTooltip.current = false;
+    }
+  }, [play]);
 
   return {
     tooltip,
     dismissTooltip,
+    resumeAfterTooltip,
+    wasPlayingBeforeTooltip,
     containerTouchHandlers: {
       onTouchStart: handleTouchStart,
       onTouchEnd: handleTouchEnd,

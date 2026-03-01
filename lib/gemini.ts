@@ -294,6 +294,61 @@ Return in the exact JSON format specified.`,
   return JSON.parse(content) as StoryResult;
 }
 
+// --- Verb Lemmatization ---
+
+export interface LemmatizeResult {
+  infinitive: string;
+  isRegular: boolean;
+}
+
+export async function lemmatizeVerb(
+  word: string,
+  language: string
+): Promise<LemmatizeResult> {
+  const apiKey = await getApiKey();
+  const langName = LANGUAGES[language as LanguageCode] ?? language;
+
+  const response = await fetch(`${GEMINI_ENDPOINT}?key=${apiKey}`, {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({
+      contents: [
+        {
+          parts: [
+            {
+              text: `Given the ${langName} word "${word}", determine its infinitive (dictionary) form and whether it is a regular or irregular verb. If it is not a verb, still provide your best guess at the infinitive form.`,
+            },
+          ],
+        },
+      ],
+      generationConfig: {
+        responseMimeType: "application/json",
+        responseSchema: {
+          type: "OBJECT",
+          properties: {
+            infinitive: { type: "STRING" },
+            isRegular: { type: "BOOLEAN" },
+          },
+          required: ["infinitive", "isRegular"],
+        },
+      },
+    }),
+  });
+
+  if (!response.ok) {
+    const text = await response.text();
+    throw new Error(`Gemini API error: ${response.status} ${text}`);
+  }
+
+  const data = await response.json() as GeminiResponse;
+  const content = data.candidates?.[0]?.content?.parts?.[0]?.text;
+  if (!content) {
+    throw new Error("No content in Gemini response");
+  }
+
+  return JSON.parse(content) as LemmatizeResult;
+}
+
 // --- Verb Conjugation ---
 
 export interface ConjugationForm {

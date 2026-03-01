@@ -8,6 +8,8 @@ interface WordTooltipProps {
   sourceLang: string;
   targetLang: string;
   onDismiss: () => void;
+  onAddAsWord?: (word: string, translation: string) => void;
+  onAddAsVerb?: (word: string) => void;
 }
 
 export default function WordTooltip({
@@ -16,6 +18,8 @@ export default function WordTooltip({
   sourceLang,
   targetLang,
   onDismiss,
+  onAddAsWord,
+  onAddAsVerb,
 }: WordTooltipProps) {
   const [translation, setTranslation] = useState<string | null>(null);
   const tooltipRef = useRef<HTMLDivElement>(null);
@@ -80,7 +84,7 @@ export default function WordTooltip({
     );
 
     setPosition({ top, left, below });
-  }, [rect]);
+  }, [rect, translation]);
 
   // Dismiss on click/touch outside, scroll, or Escape
   useEffect(() => {
@@ -116,10 +120,12 @@ export default function WordTooltip({
     };
   }, [onDismiss]);
 
+  const showActions = (onAddAsWord || onAddAsVerb) && translation && translation !== "(error)";
+
   return (
     <div
       ref={tooltipRef}
-      className="fixed z-50 bg-surface border border-border rounded-lg shadow-lg px-3 py-2 text-sm max-w-48"
+      className="fixed z-50 bg-surface border border-border rounded-lg shadow-lg px-3 py-2 text-sm max-w-52"
       style={{
         top: position?.top ?? rect.top - 8,
         left: position?.left ?? rect.left + rect.width / 2,
@@ -127,10 +133,39 @@ export default function WordTooltip({
         opacity: position ? 1 : 0,
       }}
     >
-      <p className="font-medium text-text">{word}</p>
+      <div className="flex items-start justify-between gap-2">
+        <p className="font-medium text-text">{word}</p>
+        <button
+          onClick={onDismiss}
+          className="text-text-muted hover:text-text transition-colors shrink-0 leading-none mt-0.5"
+          aria-label="Close"
+        >
+          ×
+        </button>
+      </div>
       <p className="text-text-muted">
         {translation === null ? "..." : translation}
       </p>
+      {showActions && (
+        <div className="flex gap-1 mt-2">
+          {onAddAsWord && (
+            <button
+              onClick={() => onAddAsWord(word, translation!)}
+              className="flex-1 text-xs bg-surface-hover hover:bg-primary/10 text-text border border-border rounded px-2 py-1 transition-colors"
+            >
+              + word
+            </button>
+          )}
+          {onAddAsVerb && (
+            <button
+              onClick={() => onAddAsVerb(word)}
+              className="flex-1 text-xs bg-surface-hover hover:bg-primary/10 text-text border border-border rounded px-2 py-1 transition-colors"
+            >
+              + verb
+            </button>
+          )}
+        </div>
+      )}
     </div>
   );
 }

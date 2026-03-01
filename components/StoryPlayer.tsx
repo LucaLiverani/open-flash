@@ -1,10 +1,12 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useCallback, useRef } from "react";
 import { useStoryPlayer } from "@/lib/useStoryPlayer";
 import { useLongPressTooltip } from "@/lib/useLongPressTooltip";
 import WordTooltip from "./WordTooltip";
 import WordSpans from "./WordSpans";
+import AddToVocabDeckModal from "./AddToVocabDeckModal";
+import AddToVerbDeckModal from "./AddToVerbDeckModal";
 
 interface StoryPlayerProps {
   title: string;
@@ -27,13 +29,65 @@ export default function StoryPlayer({
     useStoryPlayer(sentences, language);
   const [showTranslation, setShowTranslation] = useState(false);
 
+  // Modal state
+  const [addWordModal, setAddWordModal] = useState<{
+    word: string;
+    translation: string;
+    sentence: string;
+  } | null>(null);
+  const [addVerbModal, setAddVerbModal] = useState<{ word: string } | null>(null);
+  const [toast, setToast] = useState<string | null>(null);
+
+  // Tracks whether audio should resume when a modal is closed
+  const wasPlayingForModal = useRef(false);
+
   const {
     tooltip,
     dismissTooltip,
+    resumeAfterTooltip,
+    wasPlayingBeforeTooltip,
     containerTouchHandlers,
     handleWordClick,
     handleSentenceClick,
   } = useLongPressTooltip({ isPlaying, pause, play, jumpTo });
+
+  // Normal tooltip dismiss (× button, tap outside, escape, scroll) — resumes audio
+  const handleDismissTooltip = useCallback(() => {
+    dismissTooltip();
+    resumeAfterTooltip();
+  }, [dismissTooltip, resumeAfterTooltip]);
+
+  function openWordModal(word: string, trans: string) {
+    // Determine if audio was playing before this whole interaction
+    wasPlayingForModal.current = wasPlayingBeforeTooltip.current || isPlaying;
+    dismissTooltip(); // close tooltip without resuming audio
+    if (isPlaying) pause(); // pause if still playing (desktop case)
+    // Prefer the sentence the word was in (from DOM); fall back to active sentence
+    const si = tooltip?.sentenceIndex ?? (activeSentenceIndex >= 0 ? activeSentenceIndex : undefined);
+    setAddWordModal({
+      word,
+      translation: trans,
+      sentence: si !== undefined ? sentences[si] : "",
+    });
+  }
+
+  function openVerbModal(word: string) {
+    wasPlayingForModal.current = wasPlayingBeforeTooltip.current || isPlaying;
+    dismissTooltip();
+    if (isPlaying) pause();
+    setAddVerbModal({ word });
+  }
+
+  function handleModalClose(successMessage?: string) {
+    setAddWordModal(null);
+    setAddVerbModal(null);
+    if (wasPlayingForModal.current) play();
+    wasPlayingForModal.current = false;
+    if (successMessage) {
+      setToast(successMessage);
+      setTimeout(() => setToast(null), 2500);
+    }
+  }
 
   return (
     <div className="space-y-6">
@@ -88,6 +142,7 @@ export default function StoryPlayer({
         {sentences.map((sentence, sIndex) => (
           <span
             key={sIndex}
+            data-sentence-index={sIndex}
             onClick={() => handleSentenceClick(sIndex)}
             className={`cursor-pointer rounded transition-colors ${
               sIndex === activeSentenceIndex
@@ -114,8 +169,38 @@ export default function StoryPlayer({
           rect={tooltip.rect}
           sourceLang={language}
           targetLang={nativeLang}
-          onDismiss={dismissTooltip}
+          onDismiss={handleDismissTooltip}
+          onAddAsWord={openWordModal}
+          onAddAsVerb={openVerbModal}
         />
+      )}
+
+      {/* Add word modal */}
+      {addWordModal && (
+        <AddToVocabDeckModal
+          word={addWordModal.word}
+          translation={addWordModal.translation}
+          exampleSentence={addWordModal.sentence}
+          sourceLang={language}
+          targetLang={nativeLang}
+          onClose={handleModalClose}
+        />
+      )}
+
+      {/* Add verb modal */}
+      {addVerbModal && (
+        <AddToVerbDeckModal
+          word={addVerbModal.word}
+          language={language}
+          onClose={handleModalClose}
+        />
+      )}
+
+      {/* Toast notification */}
+      {toast && (
+        <div className="fixed bottom-6 left-1/2 -translate-x-1/2 bg-surface border border-border rounded-lg px-4 py-2 text-sm text-text shadow-lg z-50 pointer-events-none">
+          {toast}
+        </div>
       )}
     </div>
   );
