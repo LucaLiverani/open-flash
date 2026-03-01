@@ -198,6 +198,7 @@ export default function VerbExercise({ exercise, current, total, onResult, onChe
         <AddToVerbDeckModal
           word={addVerbModal.word}
           language={language}
+          translationLang={translationLang}
           onClose={handleModalClose}
         />
       )}

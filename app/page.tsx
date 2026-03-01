@@ -81,7 +81,7 @@ export default async function Dashboard() {
                 <Link
                   key={deck.id}
                   href={`/decks/${deck.id}/study`}
-                  className="flex items-center justify-between bg-black/10 hover:bg-black/20 rounded-xl p-4 transition-colors"
+                  className="flex flex-col sm:flex-row sm:items-center sm:justify-between bg-black/10 hover:bg-black/20 rounded-xl p-4 transition-colors gap-3"
                 >
                   <div className="flex items-center gap-3">
                     <span className="text-2xl">{deck.emoji}</span>
@@ -92,7 +92,7 @@ export default async function Dashboard() {
                       </p>
                     </div>
                   </div>
-                  <span className="btn btn-lg bg-black text-primary font-semibold">
+                  <span className="btn text-sm sm:text-base px-3 sm:px-4 bg-black text-primary font-semibold">
                     Study now
                   </span>
                 </Link>
@@ -101,7 +101,7 @@ export default async function Dashboard() {
                 <Link
                   key={deck.id}
                   href={`/verbs/${deck.id}/study`}
-                  className="flex items-center justify-between bg-black/10 hover:bg-black/20 rounded-xl p-4 transition-colors"
+                  className="flex flex-col sm:flex-row sm:items-center sm:justify-between bg-black/10 hover:bg-black/20 rounded-xl p-4 transition-colors gap-3"
                 >
                   <div className="flex items-center gap-3">
                     <span className="text-2xl">{deck.emoji}</span>
@@ -112,7 +112,7 @@ export default async function Dashboard() {
                       </p>
                     </div>
                   </div>
-                  <span className="btn btn-lg bg-black text-primary font-semibold">
+                  <span className="btn text-sm sm:text-base px-3 sm:px-4 bg-black text-primary font-semibold">
                     Study now
                   </span>
                 </Link>

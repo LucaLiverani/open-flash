@@ -219,7 +219,7 @@ export default function StudyPage() {
         <p className="text-text-muted mb-6">
           You reviewed {results.length} card{results.length !== 1 ? "s" : ""}.
         </p>
-        <div className="grid grid-cols-4 gap-3 mb-8">
+        <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 mb-8">
           <div className="bg-danger/10 rounded-lg p-3">
             <p className="text-2xl font-bold text-danger">{again}</p>
             <p className="text-xs text-text-muted">Again</p>

@@ -192,6 +192,7 @@ export default function StoryPlayer({
         <AddToVerbDeckModal
           word={addVerbModal.word}
           language={language}
+          translationLang={nativeLang}
           onClose={handleModalClose}
         />
       )}

@@ -9,12 +9,14 @@ import ConjugationTable from "./ConjugationTable";
 interface AddToVerbDeckModalProps {
   word: string;
   language: string;
+  translationLang?: string;
   onClose: (successMessage?: string) => void;
 }
 
 export default function AddToVerbDeckModal({
   word,
   language,
+  translationLang,
   onClose,
 }: AddToVerbDeckModalProps) {
   const [infinitive, setInfinitive] = useState("");
@@ -84,7 +86,7 @@ export default function AddToVerbDeckModal({
       const res = await fetch("/api/verbs/conjugate", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ verb: inf.trim(), language, tenses }),
+        body: JSON.stringify({ verb: inf.trim(), language, tenses, targetLang: translationLang }),
       });
       if (!res.ok) throw new Error("Conjugation failed");
       const data = await res.json() as ConjugationResult;

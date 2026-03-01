@@ -385,6 +385,7 @@ export default function BookReader({
         <AddToVerbDeckModal
           word={addVerbModal.word}
           language={language}
+          translationLang={targetLang}
           onClose={handleModalClose}
         />
       )}

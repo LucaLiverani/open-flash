@@ -35,7 +35,7 @@ type Difficulty = "beginner" | "intermediate";
 export default function StoryListening() {
   const [mode, setMode] = useState<Mode>("topic");
   const [language, setLanguage] = useState<LanguageCode>("es");
-  const [nativeLang, setNativeLang] = useState<LanguageCode>("en");
+  const [nativeLang, setNativeLang] = useState<LanguageCode>("it");
   const [topic, setTopic] = useState("");
   const [difficulty, setDifficulty] = useState<Difficulty>("beginner");
   const [generating, setGenerating] = useState(false);
