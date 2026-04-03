@@ -58,6 +58,71 @@ migrations/
   0001_initial.sql            # Database schema
 ```
 
+## Data Model
+
+The database uses Cloudflare D1 (SQLite). All IDs are UUIDs stored as TEXT. Spaced repetition fields (`interval`, `repetitions`, `ease_factor`, `next_review`) follow the SM-2 algorithm.
+
+```
+┌──────────────┐       ┌──────────────────┐
+│    decks     │       │    verb_decks    │
+├──────────────┤       ├──────────────────┤
+│ id (PK)      │       │ id (PK)          │
+│ name         │       │ name             │
+│ emoji        │       │ emoji            │
+│ source_lang  │       │ language         │
+│ target_lang  │       │ translation_lang │
+│ created_at   │       │ created_at       │
+└──────┬───────┘       └────────┬─────────┘
+       │ 1:N                    │ 1:N
+       ▼                        ▼
+┌──────────────┐       ┌──────────────────┐
+│    cards     │       │   saved_verbs    │
+├──────────────┤       ├──────────────────┤
+│ id (PK)      │       │ id (PK)          │
+│ deck_id (FK) │       │ verb_deck_id (FK)│
+│ word         │       │ language         │
+│ translation  │       │ infinitive       │
+│ example_sent.│       │ meaning          │
+│ emoji        │       │ conjugations (J) │
+│ interval     │       │ created_at       │
+│ repetitions  │       │ UNIQUE(lang, inf)│
+│ ease_factor  │       └────────┬─────────┘
+│ next_review  │                │ 1:N
+│ created_at   │                ▼
+└──────────────┘       ┌──────────────────────┐
+                       │ verb_study_progress  │
+                       ├──────────────────────┤
+                       │ id (PK)              │
+                       │ saved_verb_id (FK)   │
+                       │ tense                │
+                       │ interval             │
+                       │ repetitions          │
+                       │ ease_factor          │
+                       │ next_review          │
+                       │ created_at           │
+                       │ UNIQUE(verb_id,tense)│
+                       └──────────────────────┘
+
+┌──────────────────────┐       ┌──────────────────────┐
+│ language_tense_prefs │       │  reading_progress    │
+├──────────────────────┤       ├──────────────────────┤
+│ language (PK)        │       │ id (PK)              │
+│ all_tenses (JSON)    │       │ book_slug            │
+│ selected_tenses (J)  │       │ chapter_number       │
+│ created_at           │       │ sentence_index       │
+└──────────────────────┘       │ completed            │
+                               │ updated_at           │
+                               │ UNIQUE(slug, chapter)│
+                               └──────────────────────┘
+```
+
+**Key relationships:**
+- `cards` belong to a `decks` (vocabulary flashcards with built-in SM-2 fields)
+- `saved_verbs` belong to a `verb_decks` (conjugation data stored as JSON in `conjugations`)
+- `verb_study_progress` tracks SM-2 progress per verb per tense
+- `language_tense_prefs` stores which tenses are available/selected per language
+- `reading_progress` tracks position in shadowing books per chapter
+
 ## Running Locally
 
 ### Prerequisites
@@ -102,6 +167,36 @@ npm run db:pull
 ```
 
 This exports the remote database, wipes the local copy, and imports the remote data so your local DB is a 1:1 copy of production.
+
+### Compare Local vs Remote DB
+
+To see what differs between your local and remote databases before pushing:
+
+```bash
+npm run db:diff
+```
+
+Shows a per-table breakdown of added, removed, and changed rows. For `saved_verbs`, it also details which tenses were added or removed per verb. Raw diff data is saved in `.wrangler/diff-tmp/` for further inspection.
+
+### Push Local DB to Remote (Delta)
+
+To push only the changed rows to the remote database:
+
+```bash
+npm run db:push
+```
+
+This compares local vs remote row by row, shows a summary of changes, and asks for confirmation before executing. Only INSERT/UPDATE/DELETE statements for actual differences are sent.
+
+### Push Local DB to Remote (Full Overwrite)
+
+To fully replace the remote database with your local copy:
+
+```bash
+npm run db:push:full
+```
+
+**Warning:** This drops all remote tables and reimports everything from local. Use `db:push` (delta) for safer, incremental updates.
 
 If you get an authentication error, re-login to refresh your OAuth token first:
 
