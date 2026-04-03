@@ -31,6 +31,9 @@ export default function VerbDeckDetailClient({
   const [editLoading, setEditLoading] = useState(false);
   const [translating, setTranslating] = useState(false);
 
+  // Batch conjugation state
+  const [batchProgress, setBatchProgress] = useState<{ current: number; total: number; verb: string } | null>(null);
+
   // Conjugation state
   const [allTenses, setAllTenses] = useState<string[]>([]);
   const [selectedTenses, setSelectedTenses] = useState<string[]>([]);
@@ -211,6 +214,35 @@ export default function VerbDeckDetailClient({
     }
   }
 
+  const handleConjugateAll = async () => {
+    if (selectedTenses.length === 0 || verbs.length === 0) return;
+
+    const total = verbs.length;
+    let updatedVerbs = [...verbs];
+
+    for (let i = 0; i < verbs.length; i++) {
+      const v = verbs[i];
+      setBatchProgress({ current: i + 1, total, verb: v.infinitive });
+
+      try {
+        const res = await fetch(`/api/verbs/${v.id}`, {
+          method: "PUT",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ tenses: selectedTenses }),
+        });
+        if (res.ok) {
+          const updated = (await res.json()) as SavedVerb;
+          updatedVerbs = updatedVerbs.map((uv) => (uv.id === v.id ? updated : uv));
+        }
+      } catch {
+        // Continue with next verb on error
+      }
+    }
+
+    setVerbs(updatedVerbs);
+    setBatchProgress(null);
+  };
+
   const displayedTenses = result?.tenses.filter((t) =>
     selectedTenses.includes(t.tense)
   ) ?? [];
@@ -242,6 +274,17 @@ export default function VerbDeckDetailClient({
               {dueCount > 0 ? `Study (${dueCount} due)` : "Practice"}
             </Link>
           )}
+          {verbs.length > 0 && selectedTenses.length > 0 && (
+            <button
+              onClick={handleConjugateAll}
+              disabled={!!batchProgress}
+              className="btn btn-ghost"
+            >
+              {batchProgress
+                ? `Conjugating ${batchProgress.current}/${batchProgress.total}...`
+                : "Conjugate All"}
+            </button>
+          )}
           <button
             onClick={() => setResetStep(1)}
             className="btn btn-ghost text-danger"
@@ -250,6 +293,24 @@ export default function VerbDeckDetailClient({
           </button>
         </div>
       </div>
+
+      {/* Batch conjugation progress */}
+      {batchProgress && (
+        <div className="mb-6 bg-primary/10 border border-primary/30 rounded-xl p-4">
+          <div className="flex items-center gap-3 mb-2">
+            <div className="w-5 h-5 border-2 border-primary border-t-transparent rounded-full animate-spin" />
+            <p className="text-sm font-medium">
+              Conjugating <strong>{batchProgress.verb}</strong> ({batchProgress.current}/{batchProgress.total})
+            </p>
+          </div>
+          <div className="w-full bg-border rounded-full h-2">
+            <div
+              className="bg-primary h-2 rounded-full transition-all"
+              style={{ width: `${(batchProgress.current / batchProgress.total) * 100}%` }}
+            />
+          </div>
+        </div>
+      )}
 
       {/* Reset progress */}
       {resetStep === 1 && (
