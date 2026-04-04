@@ -26,6 +26,7 @@ export default function DeckDetailClient({
   const [editingCardId, setEditingCardId] = useState<string | null>(null);
   const [editForm, setEditForm] = useState({ word: "", translation: "", example_sentence: "", emoji: "" });
   const [editLoading, setEditLoading] = useState(false);
+  const [aiExampleLoading, setAiExampleLoading] = useState(false);
 
   const fetchCards = useCallback(async () => {
     try {
@@ -47,6 +48,32 @@ export default function DeckDetailClient({
       example_sentence: card.example_sentence || "",
       emoji: card.emoji,
     });
+  }
+
+  async function handleGenerateExample() {
+    if (!editForm.word.trim()) return;
+    setAiExampleLoading(true);
+    try {
+      const res = await fetch("/api/ai/translate", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          word: editForm.word.trim(),
+          source_lang: deck.target_lang,
+          target_lang: deck.source_lang,
+        }),
+      });
+      if (res.ok) {
+        const data = (await res.json()) as { translation: string; exampleSentence: string; emoji: string };
+        if (data.exampleSentence) {
+          setEditForm((f) => ({ ...f, example_sentence: data.exampleSentence }));
+        }
+      }
+    } catch {
+      // Silently fail
+    } finally {
+      setAiExampleLoading(false);
+    }
   }
 
   async function handleSaveEdit(cardId: string) {
@@ -217,12 +244,22 @@ export default function DeckDetailClient({
                     <div className="grid grid-cols-1 sm:grid-cols-[1fr_80px] gap-3">
                       <div>
                         <label className="block text-sm text-text-muted mb-1">Example sentence</label>
-                        <input
-                          type="text"
-                          value={editForm.example_sentence}
-                          onChange={(e) => setEditForm((f) => ({ ...f, example_sentence: e.target.value }))}
-                          className="input"
-                        />
+                        <div className="flex gap-2">
+                          <input
+                            type="text"
+                            value={editForm.example_sentence}
+                            onChange={(e) => setEditForm((f) => ({ ...f, example_sentence: e.target.value }))}
+                            className="input flex-1"
+                          />
+                          <button
+                            onClick={handleGenerateExample}
+                            disabled={aiExampleLoading || !editForm.word.trim()}
+                            className="btn btn-ghost text-sm whitespace-nowrap"
+                            title="Generate example with AI"
+                          >
+                            {aiExampleLoading ? "..." : "AI"}
+                          </button>
+                        </div>
                       </div>
                       <div>
                         <label className="block text-sm text-text-muted mb-1">Emoji</label>
