@@ -2,19 +2,27 @@
 
 import { useState, useCallback } from "react";
 import type { ConjugationTense } from "@/lib/gemini";
+import type { TenseGrammar } from "@/lib/db";
 import { useSpeech } from "@/lib/useSpeech";
 import SpeakButton from "@/components/SpeakButton";
+
+interface GrammarExample {
+  sentence: string;
+  translation: string;
+}
 
 interface ConjugationTableProps {
   tenses: ConjugationTense[];
   language?: string;
   editable?: boolean;
   onChange?: (tenses: ConjugationTense[]) => void;
+  grammarData?: Record<string, TenseGrammar>;
 }
 
-export default function ConjugationTable({ tenses, language, editable, onChange }: ConjugationTableProps) {
+export default function ConjugationTable({ tenses, language, editable, onChange, grammarData }: ConjugationTableProps) {
   const { speak, isSpeaking, isSupported } = useSpeech();
   const [speakingKey, setSpeakingKey] = useState<string | null>(null);
+  const [grammarOpen, setGrammarOpen] = useState<string | null>(null);
 
   const handleSpeak = useCallback((text: string, key: string) => {
     if (!language) return;
@@ -49,9 +57,46 @@ export default function ConjugationTable({ tenses, language, editable, onChange 
           key={t.tense}
           className="bg-surface rounded-xl border border-border p-4"
         >
-          <h3 className="font-semibold text-primary mb-3 text-sm uppercase tracking-wide">
-            {t.tense}
-          </h3>
+          <div className="flex items-center gap-2 mb-3">
+            <h3 className="font-semibold text-primary text-sm uppercase tracking-wide">
+              {t.tense}
+            </h3>
+            {grammarData?.[t.tense] && (
+              <button
+                onClick={() => setGrammarOpen(grammarOpen === t.tense ? null : t.tense)}
+                className={`text-xs min-w-[28px] min-h-[28px] flex items-center justify-center rounded-full transition-colors ${
+                  grammarOpen === t.tense
+                    ? "bg-primary/20 text-primary"
+                    : "text-text-muted hover:text-primary"
+                }`}
+                title="Grammar info"
+              >
+                ?
+              </button>
+            )}
+          </div>
+          {grammarOpen === t.tense && grammarData?.[t.tense] && (() => {
+            const g = grammarData[t.tense];
+            const examples = JSON.parse(g.examples) as GrammarExample[];
+            return (
+              <div className="mb-3 p-3 bg-surface-hover rounded-lg text-sm space-y-2">
+                <p>{g.explanation}</p>
+                <div>
+                  <span className="text-xs font-semibold text-text-muted uppercase tracking-wide">When to use</span>
+                  <p className="whitespace-pre-line">{g.when_to_use}</p>
+                </div>
+                <div className="space-y-1">
+                  {examples.map((ex, i) => (
+                    <div key={i}>
+                      <span className="font-medium">{ex.sentence}</span>
+                      <span className="text-text-muted ml-2">— {ex.translation}</span>
+                    </div>
+                  ))}
+                </div>
+                <div className="text-text-muted italic">{g.common_mistakes}</div>
+              </div>
+            );
+          })()}
           <div className="space-y-1.5">
             {t.forms.map((f, i) => {
               const key = `${t.tense}-${i}`;

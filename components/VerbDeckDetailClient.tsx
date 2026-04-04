@@ -3,7 +3,7 @@
 import { useState, useEffect, useCallback } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-import type { VerbDeck, SavedVerb } from "@/lib/db";
+import type { VerbDeck, SavedVerb, TenseGrammar } from "@/lib/db";
 import { LANGUAGES, type LanguageCode } from "@/lib/db";
 import type { ConjugationResult, ConjugationTense } from "@/lib/gemini";
 import ConjugationTable from "./ConjugationTable";
@@ -44,6 +44,12 @@ export default function VerbDeckDetailClient({
   const [tensesLoading, setTensesLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
+  // Grammar data
+  const [grammarData, setGrammarData] = useState<Record<string, TenseGrammar>>({});
+
+  // View filter for saved verbs (separate from conjugation tenses)
+  const [viewTenses, setViewTenses] = useState<string[]>([]);
+
   const langName = LANGUAGES[deck.language as LanguageCode] ?? deck.language;
   const translationName = LANGUAGES[deck.translation_lang as LanguageCode] ?? deck.translation_lang;
 
@@ -69,6 +75,7 @@ export default function VerbDeckDetailClient({
         const data = await res.json() as { all_tenses: string[]; selected_tenses: string[] };
         setAllTenses(data.all_tenses);
         setSelectedTenses(data.selected_tenses);
+        setViewTenses(data.all_tenses);
       } catch {
         setError("Failed to load tenses for this language");
       } finally {
@@ -76,6 +83,25 @@ export default function VerbDeckDetailClient({
       }
     })();
   }, [deck.language]);
+
+  // Load grammar data for this language
+  useEffect(() => {
+    (async () => {
+      try {
+        const res = await fetch(
+          `/api/verbs/grammar?language=${deck.language}&translation_lang=${deck.translation_lang}`
+        );
+        if (res.ok) {
+          const data = (await res.json()) as { grammar: TenseGrammar[] };
+          const map: Record<string, TenseGrammar> = {};
+          for (const g of data.grammar) map[g.tense] = g;
+          setGrammarData(map);
+        }
+      } catch {
+        // Grammar is optional, don't block on errors
+      }
+    })();
+  }, [deck.language, deck.translation_lang]);
 
   const handleTenseChange = async (selected: string[]) => {
     setSelectedTenses(selected);
@@ -434,6 +460,7 @@ export default function VerbDeckDetailClient({
                 <ConjugationTable
                   tenses={displayedTenses}
                   editable
+                  grammarData={grammarData}
                   onChange={(updated) =>
                     setResult((prev) =>
                       prev ? { ...prev, tenses: prev.tenses.map((t) => updated.find((u) => u.tense === t.tense) ?? t) } : prev
@@ -461,9 +488,18 @@ export default function VerbDeckDetailClient({
 
       {/* Saved verbs */}
       <div>
-        <h2 className="font-semibold mb-3">
-          Saved Verbs{verbs.length > 0 ? ` (${verbs.length})` : ""}
-        </h2>
+        <div className="flex flex-col gap-3 mb-3">
+          <h2 className="font-semibold">
+            Saved Verbs{verbs.length > 0 ? ` (${verbs.length})` : ""}
+          </h2>
+          {verbs.length > 0 && allTenses.length > 0 && (
+            <TenseSelector
+              allTenses={allTenses}
+              selectedTenses={viewTenses}
+              onChange={setViewTenses}
+            />
+          )}
+        </div>
         {verbs.length === 0 ? (
           <p className="text-text-muted text-sm">
             No saved verbs yet. Conjugate a verb and save it for quick access.
@@ -503,6 +539,7 @@ export default function VerbDeckDetailClient({
                       tenses={editTenses}
                       language={deck.language}
                       editable
+                      grammarData={grammarData}
                       onChange={setEditTenses}
                     />
                     <div className="flex gap-2">
@@ -551,8 +588,11 @@ export default function VerbDeckDetailClient({
                     {expandedVerbId === v.id && (
                       <div className="mt-3">
                         <ConjugationTable
-                          tenses={(JSON.parse(v.conjugations) as ConjugationResult).tenses}
+                          tenses={(JSON.parse(v.conjugations) as ConjugationResult).tenses.filter(
+                            (t) => viewTenses.includes(t.tense)
+                          )}
                           language={deck.language}
+                          grammarData={grammarData}
                         />
                       </div>
                     )}

@@ -75,6 +75,17 @@ export interface VerbDeckWithCounts extends VerbDeck {
   due_count: number;
 }
 
+export interface TenseGrammar {
+  id: string;
+  language: string;
+  tense: string;
+  explanation: string;
+  when_to_use: string;
+  examples: string;          // JSON string: [{sentence, translation}]
+  common_mistakes: string;
+  created_at: string;
+}
+
 export type LanguageCode = "en" | "es" | "it" | "fr" | "de" | "pt" | "ja" | "zh" | "ko";
 
 export const LANGUAGES: Record<LanguageCode, string> = {

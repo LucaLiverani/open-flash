@@ -499,6 +499,90 @@ Rules:
   return JSON.parse(content) as ConjugationResult;
 }
 
+// --- Tense Grammar Explanations ---
+
+export interface TenseGrammarResult {
+  tense: string;
+  explanation: string;
+  whenToUse: string;
+  examples: { sentence: string; translation: string }[];
+  commonMistakes: string;
+}
+
+export async function generateTenseGrammar(
+  language: string,
+  tenses: string[],
+  translationLang: string = "en"
+): Promise<TenseGrammarResult[]> {
+  const apiKey = await getApiKey();
+  const langName = LANGUAGES[language as LanguageCode] ?? language;
+  const targetLangName = LANGUAGES[translationLang as LanguageCode] ?? translationLang;
+
+  const response = await fetch(`${GEMINI_ENDPOINT}?key=${apiKey}`, {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({
+      contents: [
+        {
+          parts: [
+            {
+              text: `For the ${langName} language, explain the following verb tenses to a student who speaks ${targetLangName}. For each tense, provide:
+1. A clear explanation of what the tense is (1-2 sentences)
+2. When to use it (practical guidance, 2-4 bullet points as a single string separated by newlines)
+3. 2-3 example sentences in ${langName} with ${targetLangName} translations
+4. A brief note on common mistakes learners make (1-2 sentences)
+
+Tenses: ${JSON.stringify(tenses)}
+
+Write all explanations in ${targetLangName}. Use the tense names exactly as provided.`,
+            },
+          ],
+        },
+      ],
+      generationConfig: {
+        responseMimeType: "application/json",
+        responseSchema: {
+          type: "ARRAY",
+          items: {
+            type: "OBJECT",
+            properties: {
+              tense: { type: "STRING" },
+              explanation: { type: "STRING" },
+              whenToUse: { type: "STRING" },
+              examples: {
+                type: "ARRAY",
+                items: {
+                  type: "OBJECT",
+                  properties: {
+                    sentence: { type: "STRING" },
+                    translation: { type: "STRING" },
+                  },
+                  required: ["sentence", "translation"],
+                },
+              },
+              commonMistakes: { type: "STRING" },
+            },
+            required: ["tense", "explanation", "whenToUse", "examples", "commonMistakes"],
+          },
+        },
+      },
+    }),
+  });
+
+  if (!response.ok) {
+    const text = await response.text();
+    throw new Error(`Gemini API error: ${response.status} ${text}`);
+  }
+
+  const data = await response.json() as GeminiResponse;
+  const content = data.candidates?.[0]?.content?.parts?.[0]?.text;
+  if (!content) {
+    throw new Error("No content in Gemini response");
+  }
+
+  return JSON.parse(content) as TenseGrammarResult[];
+}
+
 // --- Verb Exercise Generation ---
 
 export interface VerbExerciseResult {

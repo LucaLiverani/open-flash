@@ -1,7 +1,8 @@
 import Link from "next/link";
-import { getDB, type VerbDeckWithCounts } from "@/lib/db";
+import { getDB, type VerbDeckWithCounts, LANGUAGES, type LanguageCode } from "@/lib/db";
 import VerbDeckCard from "@/components/VerbDeckCard";
 import EmptyState from "@/components/EmptyState";
+import GrammarReference from "@/components/GrammarReference";
 
 export const dynamic = "force-dynamic";
 
@@ -43,11 +44,30 @@ export default async function VerbDecksPage() {
           ctaHref="/verbs/new"
         />
       ) : (
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
-          {decks.map((deck) => (
-            <VerbDeckCard key={deck.id} deck={deck} />
-          ))}
-        </div>
+        <>
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+            {decks.map((deck) => (
+              <VerbDeckCard key={deck.id} deck={deck} />
+            ))}
+          </div>
+
+          <div className="mt-8">
+            <GrammarReference
+              languages={Array.from(
+                new Map(
+                  decks.map((d) => [
+                    d.language,
+                    {
+                      code: d.language,
+                      name: LANGUAGES[d.language as LanguageCode] ?? d.language,
+                      translationLang: d.translation_lang,
+                    },
+                  ])
+                ).values()
+              )}
+            />
+          </div>
+        </>
       )}
     </div>
   );
